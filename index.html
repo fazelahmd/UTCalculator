@@ -185,6 +185,19 @@
             </div>
         </div>
 
+        <!-- Confirmation Modal -->
+        <div id="confirmation-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
+            <div class="modal-content rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
+                <h2 id="confirmation-title" class="text-xl font-bold text-white">Konfirmasi</h2>
+                <p id="confirmation-message" class="text-sm text-gray-300"></p>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button id="cancel-confirmation-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md">Batal</button>
+                    <button id="confirm-action-btn" class="btn-danger px-4 py-2 text-sm font-semibold rounded-md">Ya, Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Course Form Modal -->
         <div id="course-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
             <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
@@ -214,11 +227,13 @@
                 Tuton: { label: 'Tutorial Online', badgeClass: 'bg-blue-900/50 text-blue-200' }, Tuweb: { label: 'Tutorial Webinar', badgeClass: 'bg-sky-900/50 text-sky-200' }, TTM: { label: 'Tutorial Tatap Muka', badgeClass: 'bg-teal-900/50 text-teal-200' }, Berpraktik: { label: 'Berpraktik', badgeClass: 'bg-emerald-900/50 text-emerald-200' }, Berpraktikum: { label: 'Berpraktikum', badgeClass: 'bg-green-900/50 text-green-200' }, Praktik: { label: 'Praktik', badgeClass: 'bg-lime-900/50 text-lime-200' }, Praktikum: { label: 'Praktikum', badgeClass: 'bg-amber-900/50 text-amber-200' }, 'Hanya UAS': { label: 'Hanya UAS', badgeClass: 'bg-slate-700/70 text-slate-200' }
             };
             let state = { currentUser: null, courses: [], selectedCourseIndex: null, selectedCategory: null, gradeChartInstance: null };
+            let currentAction = null;
 
             // --- DOM Elements ---
             const dom = {
                 loginContainer: document.getElementById('login-container'), appContainer: document.getElementById('app-container'), usernameInput: document.getElementById('username'), loginBtn: document.getElementById('login-btn'), logoutBtn: document.getElementById('logout-btn'), currentUserEl: document.getElementById('current-user'), coursesContainer: document.getElementById('courses-container'), totalMkEl: document.getElementById('total-mk'), totalSksEl: document.getElementById('total-sks'), totalIpEl: document.getElementById('total-ip'), courseNav: document.getElementById('course-nav'), categoryFilter: document.getElementById('category-filter'), addCourseModalBtn: document.getElementById('add-course-modal-btn'), printReportBtn: document.getElementById('print-report-btn'), gradeChartCanvas: document.getElementById('gradeChart'), 
                 notificationModal: { el: document.getElementById('notification-modal'), title: document.getElementById('notification-title'), message: document.getElementById('notification-message'), closeBtn: document.getElementById('close-notification-modal-btn') },
+                confirmationModal: { el: document.getElementById('confirmation-modal'), title: document.getElementById('confirmation-title'), message: document.getElementById('confirmation-message'), confirmBtn: document.getElementById('confirm-action-btn'), cancelBtn: document.getElementById('cancel-confirmation-btn') },
                 courseModal: { el: document.getElementById('course-modal'), title: document.getElementById('course-modal-title'), form: document.getElementById('course-form'), idInput: document.getElementById('course-id-input'), cancelBtn: document.getElementById('cancel-course-modal-btn') }
             };
 
@@ -332,7 +347,21 @@
                 openCourseModal: (index = null) => { dom.courseModal.form.reset(); if (index !== null && state.courses[index]) { const course = state.courses[index]; dom.courseModal.title.textContent = 'Edit Mata Kuliah'; dom.courseModal.idInput.value = index; dom.courseModal.form.mkName.value = course.name; dom.courseModal.form.mkSks.value = course.sks; dom.courseModal.form.mkScheme.value = course.scheme; } else { dom.courseModal.title.textContent = 'Tambah Mata Kuliah Baru'; dom.courseModal.idInput.value = ''; } dom.courseModal.el.classList.remove('modal-hidden'); },
                 closeCourseModal: () => dom.courseModal.el.classList.add('modal-hidden'),
                 handleCourseFormSubmit: (e) => { e.preventDefault(); const name = dom.courseModal.form.mkName.value.trim(); const sks = dom.courseModal.form.mkSks.value.trim(); const scheme = dom.courseModal.form.mkScheme.value; const index = dom.courseModal.idInput.value; if (!name || !sks) return handlers.showNotification('Error', 'Nama dan SKS tidak boleh kosong.'); if (index !== '') { const courseIndex = parseInt(index); state.courses[courseIndex] = normalizeCourse({ ...state.courses[courseIndex], name, sks, scheme }); handlers.showNotification('Sukses', 'Mata kuliah diperbarui!'); } else { const newCourse = normalizeCourse({ name, sks, scheme }); state.courses.push(newCourse); state.selectedCourseIndex = state.courses.length - 1; state.selectedCategory = null; handlers.showNotification('Sukses', 'Mata kuliah ditambahkan!'); } handlers.closeCourseModal(); handlers.saveAndRenderAll(); },
-                deleteCourse: (index) => { if (confirm(`Yakin ingin menghapus "${state.courses[index].name}"?`)) { state.courses.splice(index, 1); if (state.selectedCourseIndex === index || state.courses.length === 0) { state.selectedCourseIndex = state.courses.length > 0 ? 0 : null; } else if (state.selectedCourseIndex > index) { state.selectedCourseIndex -= 1; } if (!state.courses.some(c => c.scheme === state.selectedCategory)) { state.selectedCategory = null; } handlers.showNotification('Info', 'Mata kuliah dihapus.'); handlers.saveAndRenderAll(); } },
+                deleteCourse: (index) => {
+                    handlers.showConfirmation(`Yakin ingin menghapus "${state.courses[index].name}"?`, () => {
+                        state.courses.splice(index, 1);
+                        if (state.selectedCourseIndex === index || state.courses.length === 0) {
+                            state.selectedCourseIndex = state.courses.length > 0 ? 0 : null;
+                        } else if (state.selectedCourseIndex > index) {
+                            state.selectedCourseIndex -= 1;
+                        }
+                        if (!state.courses.some(c => c.scheme === state.selectedCategory)) {
+                            state.selectedCategory = null;
+                        }
+                        handlers.showNotification('Info', 'Mata kuliah dihapus.');
+                        handlers.saveAndRenderAll();
+                    });
+                },
                 updateItem: (event, courseIndex, itemType, itemIndex) => {
                     const course = state.courses[courseIndex];
                     if (!course) return;
@@ -377,6 +406,21 @@
                 },
                 showNotification: (title, message) => { dom.notificationModal.title.textContent = title; dom.notificationModal.message.textContent = message; dom.notificationModal.el.classList.remove('modal-hidden'); },
                 closeNotification: () => dom.notificationModal.el.classList.add('modal-hidden'),
+                showConfirmation: (message, onConfirm) => {
+                    dom.confirmationModal.message.textContent = message;
+                    dom.confirmationModal.el.classList.remove('modal-hidden');
+                    currentAction = onConfirm;
+                },
+                closeConfirmation: () => {
+                    dom.confirmationModal.el.classList.add('modal-hidden');
+                    currentAction = null;
+                },
+                confirmAction: () => {
+                    if (typeof currentAction === 'function') {
+                        currentAction();
+                    }
+                    handlers.closeConfirmation();
+                },
                 printReport: () => {
                     const reportWindow = window.open('', '_blank');
                     const ipk = dom.totalIpEl.textContent;
@@ -478,13 +522,15 @@
             // --- Event Listeners & Init ---
             function setupListeners() {
                 dom.loginBtn.addEventListener('click', handlers.handleLogin);
-                dom.usernameInput.addEventListener('keypress', e => e.key === 'Enter' && handlers.handleLogin);
+                dom.usernameInput.addEventListener('keypress', e => e.key === 'Enter' && handlers.handleLogin());
                 dom.logoutBtn.addEventListener('click', handlers.handleLogout);
                 dom.addCourseModalBtn.addEventListener('click', () => handlers.openCourseModal());
                 dom.courseModal.cancelBtn.addEventListener('click', handlers.closeCourseModal);
                 dom.courseModal.form.addEventListener('submit', handlers.handleCourseFormSubmit);
                 dom.printReportBtn.addEventListener('click', handlers.printReport);
                 dom.notificationModal.closeBtn.addEventListener('click', handlers.closeNotification);
+                dom.confirmationModal.cancelBtn.addEventListener('click', handlers.closeConfirmation);
+                dom.confirmationModal.confirmBtn.addEventListener('click', handlers.confirmAction);
             }
             function init() { setupListeners(); const savedUser = sessionStorage.getItem('ut_tracker_user'); if (savedUser) { dom.usernameInput.value = savedUser; handlers.handleLogin(); } else { createParticles(); } }
 
