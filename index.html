@@ -18,7 +18,7 @@
     <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Theme Initializer Script to prevent FOUC -->
+    <!-- Theme Initializer Script -->
     <script>
         (function() {
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -31,52 +31,47 @@
 
     <!-- Custom Styles -->
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Style for theme toggle icons */
+        body { font-family: 'Inter', sans-serif; }
         .theme-icon.sun { display: none; }
         .theme-icon.moon { display: block; }
         html.dark .theme-icon.sun { display: block; }
         html.dark .theme-icon.moon { display: none; }
-
-        /* Custom scrollbar for sidebar */
-        aside::-webkit-scrollbar {
-            width: 6px;
-        }
-        aside::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        aside::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1; /* cool-gray-300 */
-            border-radius: 20px;
-        }
-        html.dark aside::-webkit-scrollbar-thumb {
-            background-color: #475569; /* slate-600 */
-        }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-track { background: transparent; }
+        aside::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        html.dark aside::-webkit-scrollbar-thumb { background-color: #475569; }
         
-        /* Animation for course cards */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .course-card-animation {
-            animation: fadeIn 0.3s ease-out forwards;
+        .course-card-animation { animation: fadeIn 0.3s ease-out forwards; }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes toastOut {
+            to { opacity: 0; transform: translateY(20px); }
+        }
+        .toast { animation: toastIn 0.3s ease-out forwards, toastOut 0.3s ease-in 2.7s forwards; }
 
-        /* Hide elements by default */
-        #app-container { display: none; }
-        #login-container {
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             min-height: 100vh;
+        .modal-backdrop {
+            transition: opacity 0.2s ease-in-out;
         }
+        .modal-content {
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        }
+        .modal-hidden .modal-backdrop { opacity: 0; pointer-events: none; }
+        .modal-hidden .modal-content { opacity: 0; transform: scale(0.95); }
+        
+        #app-container, #login-container { transition: opacity 0.3s; }
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 min-h-screen">
+    
     <!-- Login Screen -->
-    <div id="login-container">
+    <div id="login-container" class="flex justify-center items-center min-h-screen p-4">
         <div class="w-full max-w-sm p-8 space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-lg">
             <div class="text-center">
                 <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Selamat Datang</h1>
@@ -87,17 +82,13 @@
                     <label for="username" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Nama Pengguna</label>
                     <input type="text" id="username" placeholder="cth: Budi" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                <button id="login-btn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                    Masuk
-                </button>
+                <button id="login-btn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">Masuk</button>
             </div>
         </div>
     </div>
 
-
     <!-- Main App -->
-    <div id="app-container" class="container mx-auto p-4 md:p-8 max-w-5xl">
-        
+    <div id="app-container" class="container mx-auto p-4 md:p-8 max-w-5xl" style="display: none;">
         <header class="flex justify-between items-center mb-8">
             <div class="text-left">
                 <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Tracker Belajar UT</h1>
@@ -105,107 +96,86 @@
             </div>
             <div class="flex items-center gap-2">
                 <button id="logout-btn" class="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Logout</button>
-                <button id="theme-toggle" class="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-950 focus:ring-blue-500 transition-all">
-                    <span class="sr-only">Toggle tema</span>
-                    <svg class="h-6 w-6 theme-icon sun" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                    <svg class="h-6 w-6 theme-icon moon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                </button>
+                <button id="theme-toggle" class="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-950 focus:ring-blue-500 transition-all"><span class="sr-only">Toggle tema</span><svg class="h-6 w-6 theme-icon sun" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg><svg class="h-6 w-6 theme-icon moon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg></button>
             </div>
         </header>
 
         <div class="lg:grid lg:grid-cols-[260px,1fr] lg:gap-8">
             <aside class="mb-10 lg:mb-0 lg:sticky lg:top-8 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto">
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Navigator</h2>
-                    <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Pilih skema penilaian atau mata kuliah untuk ditampilkan.</p>
-                    <div id="category-filter" class="mt-4 flex flex-wrap gap-2"></div>
-                    <nav id="course-nav" aria-label="Navigator mata kuliah" class="mt-4 flex flex-col gap-1 text-sm"></nav>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm space-y-4">
+                    <div>
+                        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Navigator</h2>
+                        <div id="category-filter" class="mt-4 flex flex-wrap gap-2"></div>
+                        <nav id="course-nav" aria-label="Navigator mata kuliah" class="mt-4 flex flex-col gap-1 text-sm"></nav>
+                    </div>
+                    <div class="border-t border-slate-200/70 dark:border-slate-800 pt-4">
+                         <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Pengaturan Data</h2>
+                         <div class="mt-4 flex flex-col gap-2">
+                            <button id="add-course-modal-btn" class="w-full text-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Tambah MK</button>
+                            <button id="export-data-btn" class="w-full text-sm text-slate-700 dark:text-slate-200 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>Ekspor Data</button>
+                            <button id="import-data-btn" class="w-full text-sm text-slate-700 dark:text-slate-200 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>Impor Data</button>
+                            <button id="clear-data-btn" class="w-full text-sm text-red-600 bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>Hapus Semua Data</button>
+                            <input type="file" id="import-file-input" class="hidden" accept=".json">
+                         </div>
+                    </div>
                 </div>
             </aside>
             <main class="space-y-8">
                 <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm">
-                        <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Mata Kuliah</h3>
-                        <p id="total-mk" class="text-2xl font-bold text-slate-900 dark:text-white">0</p>
-                    </div>
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm">
-                        <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total SKS</h3>
-                        <p id="total-sks" class="text-2xl font-bold text-slate-900 dark:text-white">0</p>
-                    </div>
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm">
-                        <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Indeks Prestasi (IP)</h3>
-                        <p id="total-ip" class="text-2xl font-bold text-slate-900 dark:text-white">0.00</p>
-                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Mata Kuliah</h3><p id="total-mk" class="text-2xl font-bold text-slate-900 dark:text-white">0</p></div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total SKS</h3><p id="total-sks" class="text-2xl font-bold text-slate-900 dark:text-white">0</p></div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Indeks Prestasi (IP)</h3><p id="total-ip" class="text-2xl font-bold text-slate-900 dark:text-white">0.00</p></div>
                 </section>
                 
-                <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm">
-                    <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Grafik Nilai Mata Kuliah</h2>
-                    <div class="relative h-64">
-                         <canvas id="gradeChart"></canvas>
-                    </div>
-                </section>
+                <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm"><h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Grafik Nilai Mata Kuliah</h2><div class="relative h-64"><canvas id="gradeChart"></canvas></div></section>
 
-                <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm form-card">
-                    <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Tambah Mata Kuliah Baru</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                        <div class="md:col-span-3">
-                            <label for="mkName" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Kode & Nama Mata Kuliah</label>
-                            <input type="text" id="mkName" placeholder="e.g., MKDU4111 PKn" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="md:col-span-1">
-                            <label for="mkSks" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">SKS</label>
-                            <input type="number" id="mkSks" placeholder="3" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="mkScheme" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Skema Penilaian</label>
-                            <select id="mkScheme" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="Tuton">Tutorial Online</option>
-                                <option value="Tuweb">Tutorial Webinar</option>
-                                <option value="TTM">Tutorial Tatap Muka</option>
-                                <option value="Praktik">Praktik/Praktikum</option>
-                                <option value="Hanya UAS">Hanya UAS</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button id="add-course-btn" class="mt-4 w-full md:w-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-blue-500 flex items-center justify-center gap-2 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                        Tambahkan
-                    </button>
-                </section>
-
-                <section>
-                    <div id="courses-container" class="space-y-6">
-                        <!-- Course cards will be injected here -->
-                    </div>
-                </section>
+                <section><div id="courses-container" class="space-y-6"></div></section>
             </main>
         </div>
 
         <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400">
-            <div class="social-links flex justify-center items-center gap-6">
-                 <a href="https://github.com/imrosyd" target="_blank" rel="noopener noreferrer" title="GitHub" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
-                    <span class="sr-only">GitHub</span>
-                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.55v-2.15c-3.2.7-3.88-1.54-3.88-1.54-.53-1.36-1.3-1.72-1.3-1.72-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.77 2.73 1.26 3.39.96.1-.75.41-1.26.74-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.68.42.36.8 1.07.8 2.15v3.18c0 .3.2.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.74 18.27.5 12 .5Z"/>
-                    </svg>
-                </a>
-                <a href="https://www.linkedin.com/in/imrosyd" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
-                    <span class="sr-only">LinkedIn</span>
-                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M20.45 20.45h-3.55v-5.4c0-1.29-.02-2.95-1.8-2.95-1.81 0-2.09 1.42-2.09 2.87v5.48h-3.55V9h3.41v1.56h.05c.47-.89 1.62-1.82 3.33-1.82 3.56 0 4.21 2.34 4.21 5.39v6.32zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zm1.78 13.02H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/>
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/imrosyd" target="_blank" rel="noopener noreferrer" title="Instagram" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
-                    <span class="sr-only">Instagram</span>
-                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 2a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zm5.75-.88a1.13 1.13 0 1 1-2.25 0 1.13 1.13 0 0 1 2.25 0z"/>
-                    </svg>
-                </a>
-            </div>
-            <p class="mt-4 text-sm">Dibuat dengan ❤️ oleh imrosyd</p>
+            <div class="social-links flex justify-center items-center gap-6"><a href="https://github.com/imrosyd" target="_blank" rel="noopener noreferrer" title="GitHub" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">GitHub</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.55v-2.15c-3.2.7-3.88-1.54-3.88-1.54-.53-1.36-1.3-1.72-1.3-1.72-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.77 2.73 1.26 3.39.96.1-.75.41-1.26.74-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.68.42.36.8 1.07.8 2.15v3.18c0 .3.2.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.74 18.27.5 12 .5Z"/></svg></a><a href="https://www.linkedin.com/in/imrosyd" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">LinkedIn</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.4c0-1.29-.02-2.95-1.8-2.95-1.81 0-2.09 1.42-2.09 2.87v5.48h-3.55V9h3.41v1.56h.05c.47-.89 1.62-1.82 3.33-1.82 3.56 0 4.21 2.34 4.21 5.39v6.32zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zm1.78 13.02H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a><a href="https://www.instagram.com/imrosyd" target="_blank" rel="noopener noreferrer" title="Instagram" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">Instagram</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 2a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zm5.75-.88a1.13 1.13 0 1 1-2.25 0 1.13 1.13 0 0 1 2.25 0z"/></svg></a></div><p class="mt-4 text-sm">Dibuat dengan ❤️ oleh imrosyd</p>
         </footer>
-
     </div>
+    
+    <!-- Modals and Toasts Container -->
+    <div id="modals-container">
+        <!-- Welcome Modal -->
+        <div id="welcome-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="modal-backdrop fixed inset-0 bg-black/40 dark:bg-black/60"></div>
+            <div class="modal-content bg-white dark:bg-slate-900 rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Selamat Datang di UT Tracker!</h2>
+                <p class="text-sm text-slate-600 dark:text-slate-300">Aplikasi ini membantumu melacak progres belajar di Universitas Terbuka. Semua data disimpan secara lokal di browser-mu.</p>
+                <ul class="text-sm text-slate-600 dark:text-slate-300 list-disc list-inside space-y-1">
+                    <li>Tambahkan mata kuliah beserta skema nilainya.</li>
+                    <li>Isi nilaimu untuk melihat kalkulasi nilai akhir dan IPK.</li>
+                    <li>Gunakan fitur <b>Ekspor Data</b> untuk backup dan <b>Impor Data</b> untuk memuatnya kembali.</li>
+                </ul>
+                <button id="close-welcome-modal" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Mulai Gunakan</button>
+            </div>
+        </div>
+
+        <!-- Course Form Modal (for Add/Edit) -->
+        <div id="course-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="modal-backdrop fixed inset-0 bg-black/40 dark:bg-black/60"></div>
+            <div class="modal-content bg-white dark:bg-slate-900 rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4 relative">
+                <h2 id="course-modal-title" class="text-xl font-bold text-slate-900 dark:text-white">Tambah Mata Kuliah</h2>
+                <form id="course-form">
+                    <input type="hidden" id="course-id-input">
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                        <div class="md:col-span-3"><label for="mkName" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Kode & Nama Mata Kuliah</label><input type="text" id="mkName" placeholder="e.g., MKDU4111 PKn" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
+                        <div class="md:col-span-1"><label for="mkSks" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">SKS</label><input type="number" id="mkSks" placeholder="3" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required min="1"></div>
+                        <div class="md:col-span-2"><label for="mkScheme" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Skema Penilaian</label><select id="mkScheme" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="Tuton">Tutorial Online</option><option value="Tuweb">Tutorial Webinar</option><option value="TTM">Tutorial Tatap Muka</option><option value="Praktik">Praktik/Praktikum</option><option value="Hanya UAS">Hanya UAS</option></select></div>
+                    </div>
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button type="button" id="cancel-course-modal" class="px-4 py-2 text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-md">Batal</button>
+                        <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
 
     <!-- Main Application Logic -->
     <script>
@@ -218,11 +188,6 @@
             const loginBtn = document.getElementById('login-btn');
             const logoutBtn = document.getElementById('logout-btn');
             const currentUserEl = document.getElementById('current-user');
-            
-            const mkNameInput = document.getElementById('mkName');
-            const mkSksInput = document.getElementById('mkSks');
-            const mkSchemeInput = document.getElementById('mkScheme');
-            const addCourseBtn = document.getElementById('add-course-btn');
             const coursesContainer = document.getElementById('courses-container');
             const totalMkEl = document.getElementById('total-mk');
             const totalSksEl = document.getElementById('total-sks');
@@ -230,352 +195,149 @@
             const categoryFilterContainer = document.getElementById('category-filter');
             const courseNavContainer = document.getElementById('course-nav');
             const gradeChartCanvas = document.getElementById('gradeChart');
-
+            const addCourseModalBtn = document.getElementById('add-course-modal-btn');
+            const exportDataBtn = document.getElementById('export-data-btn');
+            const importDataBtn = document.getElementById('import-data-btn');
+            const importFileInput = document.getElementById('import-file-input');
+            const clearDataBtn = document.getElementById('clear-data-btn');
+            const courseModal = document.getElementById('course-modal');
+            const courseModalTitle = document.getElementById('course-modal-title');
+            const courseForm = document.getElementById('course-form');
+            const cancelCourseModalBtn = document.getElementById('cancel-course-modal');
+            const courseIdInput = document.getElementById('course-id-input');
+            const welcomeModal = document.getElementById('welcome-modal');
+            const closeWelcomeModalBtn = document.getElementById('close-welcome-modal');
+            
             // --- STATE MANAGEMENT ---
             let courses = [];
             let activeFilter = 'All';
             let currentUser = null;
             let gradeChartInstance = null;
-
-            // --- ASSESSMENT SCHEMES & GRADE CONFIGURATION ---
-            const SCHEMES = {
-                'Tuton': {
-                    name: 'Tutorial Online',
-                    contribution: 0.3, 
-                    components: [
-                        { key: 'partisipasi', label: 'Kehadiran', weight: 0.2 },
-                        { key: 'diskusi', label: 'Rata-rata Diskusi', weight: 0.3 },
-                        { key: 'tugas', label: 'Rata-rata Tugas', weight: 0.5 },
-                        { key: 'uas', label: 'Nilai UAS', weight: 0.7 } 
-                    ]
-                },
-                'TTM': {
-                    name: 'Tutorial Tatap Muka',
-                    contribution: 0.4,
-                     components: [
-                        { key: 'partisipasi', label: 'Kehadiran', weight: 0.2 },
-                        { key: 'diskusi', label: 'Partisipasi Kelas', weight: 0.3 },
-                        { key: 'tugas', label: 'Rata-rata Tugas', weight: 0.5 },
-                        { key: 'uas', label: 'Nilai UAS', weight: 0.6 }
-                    ]
-                },
-                'Tuweb': {
-                    name: 'Tutorial Webinar',
-                    contribution: 0.2,
-                    components: [
-                        { key: 'partisipasi', label: 'Kehadiran', weight: 1.0 },
-                        { key: 'uas', label: 'Nilai UAS', weight: 0.8 }
-                    ]
-                },
-                'Praktik': {
-                    name: 'Praktik/Praktikum',
-                    contribution: 0.5,
-                    components: [
-                        { key: 'laporan', label: 'Nilai Laporan', weight: 1.0 },
-                        { key: 'uas', label: 'Ujian Akhir Praktik', weight: 0.5 }
-                    ]
-                },
-                'Hanya UAS': {
-                    name: 'Hanya UAS',
-                    contribution: 0,
-                    components: [
-                        { key: 'uas', label: 'Nilai UAS', weight: 1.0 }
-                    ]
-                }
-            };
-
-            const gradeConverter = (score) => {
-                if (score >= 85) return { grade: 'A', point: 4.0, color: 'rgba(74, 222, 128, 0.6)' };
-                if (score >= 70) return { grade: 'B', point: 3.0, color: 'rgba(96, 165, 250, 0.6)' };
-                if (score >= 55) return { grade: 'C', point: 2.0, color: 'rgba(251, 191, 36, 0.6)' };
-                if (score >= 40) return { grade: 'D', point: 1.0, color: 'rgba(249, 115, 22, 0.6)' };
-                return { grade: 'E', point: 0.0, color: 'rgba(239, 68, 68, 0.6)' };
-            };
-
+            const SCHEMES = {'Tuton':{name:'Tutorial Online',contribution:0.3,components:[{key:'partisipasi',label:'Kehadiran',weight:0.2},{key:'diskusi',label:'Rata-rata Diskusi',weight:0.3},{key:'tugas',label:'Rata-rata Tugas',weight:0.5},{key:'uas',label:'Nilai UAS',weight:0.7}] },'TTM':{name:'Tutorial Tatap Muka',contribution:0.4,components:[{key:'partisipasi',label:'Kehadiran',weight:0.2},{key:'diskusi',label:'Partisipasi Kelas',weight:0.3},{key:'tugas',label:'Rata-rata Tugas',weight:0.5},{key:'uas',label:'Nilai UAS',weight:0.6}] },'Tuweb':{name:'Tutorial Webinar',contribution:0.2,components:[{key:'partisipasi',label:'Kehadiran',weight:1},{key:'uas',label:'Nilai UAS',weight:0.8}] },'Praktik':{name:'Praktik/Praktikum',contribution:0.5,components:[{key:'laporan',label:'Nilai Laporan',weight:1},{key:'uas',label:'Ujian Akhir Praktik',weight:0.5}] },'Hanya UAS':{name:'Hanya UAS',contribution:0,components:[{key:'uas',label:'Nilai UAS',weight:1}] } };
+            const gradeConverter = (s)=>{if(s>=85)return{grade:'A',point:4,color:'rgba(74, 222, 128, 0.6)'};if(s>=70)return{grade:'B',point:3,color:'rgba(96, 165, 250, 0.6)'};if(s>=55)return{grade:'C',point:2,color:'rgba(251, 191, 36, 0.6)'};if(s>=40)return{grade:'D',point:1,color:'rgba(249, 115, 22, 0.6)'};return{grade:'E',point:0,color:'rgba(239, 68, 68, 0.6)'}};
+            
             // --- CORE FUNCTIONS ---
-
-            const saveData = () => {
-                if (currentUser) {
-                    localStorage.setItem(`ut_courses_${currentUser}`, JSON.stringify(courses));
-                }
+            const saveData = () => { if (currentUser) localStorage.setItem(`ut_courses_${currentUser}`, JSON.stringify(courses)); };
+            const loadData = () => { if (currentUser) courses = JSON.parse(localStorage.getItem(`ut_courses_${currentUser}`)) || []; };
+            const calculateCourseGrade = (c) => {
+                const s=SCHEMES[c.scheme]; if(!s)return; let u=parseFloat(c.grades.uas)||0,t=0; if(s.contribution>0){let w=0,v=0;s.components.forEach(p=>{if(p.key!=='uas'){const g=parseFloat(c.grades[p.key])||0;v+=g*p.weight;w+=p.weight}});t=w>0?v/w:0} const f=u>=30?t*s.contribution+u*(1-s.contribution):u; const{grade:g,point:p}=gradeConverter(f);c.finalScore=f.toFixed(2);c.finalGrade=g;c.gradePoint=p;
             };
+            const updateStats = () => { const tS = courses.reduce((s, c) => s + c.sks, 0); const tMk = courses.length; let tWp = 0; courses.forEach(c => {tWp += c.gradePoint * c.sks;}); const ip = tS > 0 ? (tWp / tS) : 0; totalMkEl.textContent = tMk; totalSksEl.textContent = tS; totalIpEl.textContent = ip.toFixed(2);};
 
-            const loadData = () => {
-                if (currentUser) {
-                    courses = JSON.parse(localStorage.getItem(`ut_courses_${currentUser}`)) || [];
-                }
-            };
-
-            const calculateCourseGrade = (course) => {
-                const scheme = SCHEMES[course.scheme];
-                if (!scheme) return { finalScore: 0, grade: 'N/A', point: 0 };
-                
-                const uasScore = parseFloat(course.grades.uas) || 0;
-                let tutorialScore = 0;
-
-                if (scheme.contribution > 0) {
-                    let totalTutorialWeight = 0;
-                    let weightedTutorialSum = 0;
-                    scheme.components.forEach(comp => {
-                        if (comp.key !== 'uas') {
-                            const grade = parseFloat(course.grades[comp.key]) || 0;
-                            weightedTutorialSum += grade * comp.weight;
-                            totalTutorialWeight += comp.weight;
-                        }
-                    });
-                    tutorialScore = totalTutorialWeight > 0 ? weightedTutorialSum / totalTutorialWeight : 0;
-                }
-               
-                const finalScore = uasScore >= 30
-                    ? (tutorialScore * scheme.contribution) + (uasScore * (1 - scheme.contribution))
-                    : uasScore;
-
-                const { grade, point } = gradeConverter(finalScore);
-                
-                course.finalScore = finalScore.toFixed(2);
-                course.finalGrade = grade;
-                course.gradePoint = point;
-            };
-            
-            const updateStats = () => {
-                const totalSks = courses.reduce((sum, course) => sum + course.sks, 0);
-                const totalMk = courses.length;
-                let totalWeightedPoints = 0;
-                courses.forEach(course => {
-                    totalWeightedPoints += course.gradePoint * course.sks;
-                });
-                const ip = totalSks > 0 ? (totalWeightedPoints / totalSks) : 0;
-                totalMkEl.textContent = totalMk;
-                totalSksEl.textContent = totalSks;
-                totalIpEl.textContent = ip.toFixed(2);
-            };
-
+            // --- RENDER FUNCTIONS ---
             const renderCourses = () => {
-                coursesContainer.innerHTML = '';
-                courseNavContainer.innerHTML = '';
-                const filteredCourses = courses.filter(c => activeFilter === 'All' || c.scheme === activeFilter);
-                
-                if (filteredCourses.length === 0) {
-                    coursesContainer.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-sm font-medium text-slate-900 dark:text-white">Belum Ada Mata Kuliah</h3><p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tambahkan mata kuliah baru menggunakan formulir di atas.</p></div>`;
-                }
-
-                filteredCourses.forEach(course => {
-                    const courseEl = document.createElement('div');
-                    courseEl.id = `course-${course.id}`;
-                    courseEl.className = 'course-card-animation bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm space-y-4';
-                    const scheme = SCHEMES[course.scheme];
-                    const gradeInputsHTML = scheme.components.map(comp => `<div class="flex-1 min-w-[120px]"><label for="${comp.key}-${course.id}" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">${comp.label}</label><input type="number" id="${comp.key}-${course.id}" data-course-id="${course.id}" data-grade-key="${comp.key}" class="w-full text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="0" max="100" step="1" value="${course.grades[comp.key] || ''}" placeholder="0-100"></div>`).join('');
-                    courseEl.innerHTML = `<div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2"><div><h3 class="text-lg font-bold text-slate-900 dark:text-white">${course.name}</h3><div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1"><span class="font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">${course.sks} SKS</span><span>${scheme.name}</span></div></div><button data-delete-id="${course.id}" class="delete-btn self-start sm:self-center text-slate-400 hover:text-red-500 dark:hover:text-red-500 transition-colors p-1 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button></div><div class="flex flex-wrap items-end gap-4 border-t border-slate-200/70 dark:border-slate-800 pt-4">${gradeInputsHTML}</div><div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg mt-4"><p class="text-sm text-slate-600 dark:text-slate-300">Nilai Akhir: <span class="font-bold text-lg text-slate-900 dark:text-white">${course.finalScore}</span></p><p class="text-sm text-slate-600 dark:text-slate-300">Grade: <span class="font-bold text-lg text-slate-900 dark:text-white">${course.finalGrade}</span></p></div>`;
-                    coursesContainer.appendChild(courseEl);
-                    const navLink = document.createElement('a');
-                    navLink.href = `#course-${course.id}`;
-                    navLink.className = 'block font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors truncate';
-                    navLink.textContent = course.name;
-                    courseNavContainer.appendChild(navLink);
+                coursesContainer.innerHTML = ''; courseNavContainer.innerHTML = '';
+                const filtered = courses.filter(c => activeFilter === 'All' || c.scheme === activeFilter);
+                if (filtered.length === 0) { coursesContainer.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-sm font-medium text-slate-900 dark:text-white">Belum Ada Mata Kuliah</h3><p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gunakan tombol 'Tambah MK' di samping untuk memulai.</p></div>`; }
+                filtered.forEach(c => {
+                    const el = document.createElement('div'); el.id = `course-${c.id}`; el.className = 'course-card-animation bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm space-y-4';
+                    const s = SCHEMES[c.scheme]; const inputs = s.components.map(p => `<div class="flex-1 min-w-[120px]"><label for="${p.key}-${c.id}" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">${p.label}</label><input type="number" id="${p.key}-${c.id}" data-course-id="${c.id}" data-grade-key="${p.key}" class="w-full text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="0" max="100" step="1" value="${c.grades[p.key]||''}" placeholder="0-100"></div>`).join('');
+                    el.innerHTML = `<div class="flex justify-between items-start gap-2"><div><h3 class="text-lg font-bold text-slate-900 dark:text-white">${c.name}</h3><div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1"><span class="font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">${c.sks} SKS</span><span>${s.name}</span></div></div><div class="flex gap-1"><button data-edit-id="${c.id}" class="edit-btn text-slate-400 hover:text-blue-500 p-1 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button data-delete-id="${c.id}" class="delete-btn text-slate-400 hover:text-red-500 p-1 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button></div></div><div class="flex flex-wrap items-end gap-4 border-t border-slate-200/70 dark:border-slate-800 pt-4">${inputs}</div><div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg mt-4"><p class="text-sm text-slate-600 dark:text-slate-300">Nilai Akhir: <span class="font-bold text-lg text-slate-900 dark:text-white">${c.finalScore}</span></p><p class="text-sm text-slate-600 dark:text-slate-300">Grade: <span class="font-bold text-lg text-slate-900 dark:text-white">${c.finalGrade}</span></p></div>`;
+                    coursesContainer.appendChild(el); const navLink = document.createElement('a'); navLink.href = `#course-${c.id}`; navLink.className = 'block font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors truncate'; navLink.textContent = c.name; courseNavContainer.appendChild(navLink);
                 });
             };
-
             const renderFilters = () => {
-                categoryFilterContainer.innerHTML = '';
-                const schemesInUse = ['All', ...new Set(courses.map(c => c.scheme))];
-                schemesInUse.forEach(scheme => {
-                    const button = document.createElement('button');
-                    button.textContent = scheme;
-                    button.dataset.filter = scheme;
-                    button.className = `filter-btn text-xs font-semibold px-2.5 py-1 rounded-full transition-colors ${activeFilter === scheme ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`;
-                    categoryFilterContainer.appendChild(button);
-                });
+                categoryFilterContainer.innerHTML = ''; const schemes = ['All', ...new Set(courses.map(c => c.scheme))]; schemes.forEach(s => { const b = document.createElement('button'); b.textContent = s; b.dataset.filter = s; b.className = `filter-btn text-xs font-semibold px-2.5 py-1 rounded-full transition-colors ${activeFilter===s?'bg-blue-600 text-white':'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`; categoryFilterContainer.appendChild(b); });
             };
-
             const renderChart = () => {
-                if (gradeChartInstance) {
-                    gradeChartInstance.destroy();
-                }
-
-                const chartData = {
-                    labels: courses.map(c => c.name.length > 15 ? c.name.substring(0, 15) + '...' : c.name).reverse(),
-                    datasets: [{
-                        label: 'Nilai Akhir',
-                        data: courses.map(c => c.finalScore).reverse(),
-                        backgroundColor: courses.map(c => gradeConverter(c.finalScore).color).reverse(),
-                        borderColor: courses.map(c => gradeConverter(c.finalScore).color.replace('0.6', '1')).reverse(),
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }]
-                };
-
-                const isDarkMode = document.documentElement.classList.contains('dark');
-                const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-                const textColor = isDarkMode ? '#e2e8f0' : '#475569';
-
-                gradeChartInstance = new Chart(gradeChartCanvas, {
-                    type: 'bar',
-                    data: chartData,
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const course = courses.slice().reverse()[context.dataIndex];
-                                        return `Nilai: ${context.raw} (Grade: ${course.finalGrade})`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                max: 100,
-                                grid: { color: gridColor },
-                                ticks: { color: textColor }
-                            },
-                             y: {
-                                grid: { display: false },
-                                ticks: { color: textColor }
-                            }
-                        }
-                    }
-                });
-            };
-
-            const addCourse = () => {
-                const name = mkNameInput.value.trim();
-                const sks = parseInt(mkSksInput.value);
-                const scheme = mkSchemeInput.value;
-
-                if (!name || isNaN(sks) || sks <= 0) {
-                    mkNameInput.classList.add('border-red-500', 'focus:ring-red-500');
-                    mkSksInput.classList.add('border-red-500', 'focus:ring-red-500');
-                    setTimeout(() => {
-                        mkNameInput.classList.remove('border-red-500', 'focus:ring-red-500');
-                        mkSksInput.classList.remove('border-red-500', 'focus:ring-red-500');
-                    }, 2000);
-                    return;
-                }
-
-                const newCourse = {
-                    id: Date.now(),
-                    name, sks, scheme,
-                    grades: {}, finalScore: 0, finalGrade: 'N/A', gradePoint: 0
-                };
-                
-                calculateCourseGrade(newCourse);
-                courses.unshift(newCourse);
-                mkNameInput.value = '';
-                mkSksInput.value = '';
-                updateUI();
-            };
-
-            const updateCourseGrade = (courseId, gradeKey, value) => {
-                const course = courses.find(c => c.id === courseId);
-                if (course) {
-                    course.grades[gradeKey] = value;
-                    calculateCourseGrade(course);
-                    updateUI();
-                }
+                if(gradeChartInstance)gradeChartInstance.destroy();const d={labels:courses.map(c=>c.name.length>15?c.name.substring(0,15)+'...':c.name).reverse(),datasets:[{label:'Nilai Akhir',data:courses.map(c=>c.finalScore).reverse(),backgroundColor:courses.map(c=>gradeConverter(c.finalScore).color).reverse(),borderColor:courses.map(c=>gradeConverter(c.finalScore).color.replace('0.6','1')).reverse(),borderWidth:1,borderRadius:4}]};const m=document.documentElement.classList.contains('dark');const g=m?'rgba(255, 255, 255, 0.1)':'rgba(0, 0, 0, 0.1)';const t=m?'#e2e8f0':'#475569';gradeChartInstance=new Chart(gradeChartCanvas,{type:'bar',data:d,options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){const c=courses.slice().reverse()[ctx.dataIndex];return `Nilai: ${ctx.raw} (Grade: ${c.finalGrade})`}}}},scales:{x:{beginAtZero:true,max:100,grid:{color:g},ticks:{color:t}},y:{grid:{display:false},ticks:{color:t}}}}});
             };
             
-            const deleteCourse = (courseId) => {
-                 courses = courses.filter(c => c.id !== courseId);
-                 updateUI();
+            // --- FEATURE FUNCTIONS ---
+            const showToast = (message, type = 'success') => {
+                const toast = document.createElement('div');
+                const colors = { success: 'bg-green-500', error: 'bg-red-500' };
+                toast.className = `toast text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-lg ${colors[type]}`;
+                toast.textContent = message;
+                document.getElementById('toast-container').appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
             };
-
-            const updateUI = () => {
-                saveData();
-                renderFilters();
-                renderCourses();
-                updateStats();
-                renderChart();
-            };
-
-            // --- AUTH FUNCTIONS ---
-            const handleLogin = () => {
-                const username = usernameInput.value.trim();
-                if (username) {
-                    currentUser = username;
-                    sessionStorage.setItem('ut_tracker_user', username); // Keep user logged in for the session
-                    loginContainer.style.display = 'none';
-                    appContainer.style.display = 'block';
-                    currentUserEl.textContent = currentUser;
-                    loadData();
-                    updateUI();
+            const openCourseModal = (course = null) => {
+                courseForm.reset();
+                if (course) {
+                    courseModalTitle.textContent = 'Edit Mata Kuliah';
+                    courseIdInput.value = course.id;
+                    courseForm.mkName.value = course.name;
+                    courseForm.mkSks.value = course.sks;
+                    courseForm.mkScheme.value = course.scheme;
                 } else {
-                    usernameInput.classList.add('border-red-500', 'focus:ring-red-500');
+                    courseModalTitle.textContent = 'Tambah Mata Kuliah Baru';
+                    courseIdInput.value = '';
                 }
+                courseModal.classList.remove('modal-hidden');
             };
+            const closeCourseModal = () => courseModal.classList.add('modal-hidden');
+            const handleCourseFormSubmit = (e) => {
+                e.preventDefault();
+                const id = courseIdInput.value ? parseInt(courseIdInput.value) : null;
+                const name = courseForm.mkName.value.trim();
+                const sks = parseInt(courseForm.mkSks.value);
+                const scheme = courseForm.mkScheme.value;
+                if (!name || isNaN(sks) || sks <= 0) return showToast('Harap isi semua kolom dengan benar.', 'error');
+                
+                if (id) {
+                    const course = courses.find(c => c.id === id);
+                    if (course) { course.name = name; course.sks = sks; course.scheme = scheme; calculateCourseGrade(course); }
+                    showToast('Mata kuliah berhasil diperbarui!');
+                } else {
+                    const newCourse = {id:Date.now(),name,sks,scheme,grades:{},finalScore:0,finalGrade:'N/A',gradePoint:0};
+                    calculateCourseGrade(newCourse); courses.unshift(newCourse);
+                    showToast('Mata kuliah berhasil ditambahkan!');
+                }
+                closeCourseModal(); updateUI();
+            };
+            
+            // --- AUTH & DATA MANAGEMENT ---
+            const handleLogin = () => {
+                const username = usernameInput.value.trim(); if (!username) { usernameInput.classList.add('border-red-500'); return; }
+                currentUser = username; sessionStorage.setItem('ut_tracker_user', username);
+                loginContainer.style.display = 'none'; appContainer.style.display = 'block';
+                currentUserEl.textContent = currentUser; loadData(); updateUI();
+                if (!localStorage.getItem('ut_tracker_welcomed')) { welcomeModal.classList.remove('modal-hidden'); }
+            };
+            const handleLogout = () => { currentUser = null; sessionStorage.removeItem('ut_tracker_user'); courses = []; loginContainer.style.display = 'flex'; appContainer.style.display = 'none'; usernameInput.value = ''; };
+            const handleExport = () => { if (courses.length === 0) return showToast('Tidak ada data untuk diekspor.', 'error'); const dataStr = JSON.stringify(courses, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `ut_tracker_data_${currentUser}.json`; a.click(); URL.revokeObjectURL(url); showToast('Data berhasil diekspor!'); };
+            const handleImport = (e) => {
+                const file = e.target.files[0]; if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try { const importedCourses = JSON.parse(event.target.result); if (!Array.isArray(importedCourses)) throw new Error(); courses = importedCourses; updateUI(); showToast('Data berhasil diimpor!'); } catch (err) { showToast('Gagal mengimpor data. File tidak valid.', 'error'); }
+                };
+                reader.readAsText(file); e.target.value = '';
+            };
+            const handleClearData = () => { if (confirm('Anda yakin ingin menghapus SEMUA data mata kuliah? Aksi ini tidak dapat dibatalkan.')) { courses = []; updateUI(); showToast('Semua data berhasil dihapus.'); } };
 
-            const handleLogout = () => {
-                currentUser = null;
-                sessionStorage.removeItem('ut_tracker_user');
-                courses = [];
-                loginContainer.style.display = 'flex';
-                appContainer.style.display = 'none';
-                usernameInput.value = '';
-            };
+            const updateUI = () => { saveData(); renderFilters(); renderCourses(); updateStats(); renderChart(); };
 
             // --- EVENT LISTENERS ---
-            themeToggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-                // Re-render chart with new theme colors
-                if(currentUser) renderChart();
-            });
-
+            themeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'; if(currentUser) renderChart(); });
             loginBtn.addEventListener('click', handleLogin);
-            usernameInput.addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') handleLogin();
-            });
+            usernameInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
             logoutBtn.addEventListener('click', handleLogout);
-
-            addCourseBtn.addEventListener('click', addCourse);
-
-            coursesContainer.addEventListener('change', (e) => {
-                if (e.target.matches('input[type="number"]')) {
-                    const { courseId, gradeKey } = e.target.dataset;
-                    let value = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0));
-                    e.target.value = value;
-                    updateCourseGrade(parseInt(courseId), gradeKey, value);
-                }
-            });
+            addCourseModalBtn.addEventListener('click', () => openCourseModal());
+            cancelCourseModalBtn.addEventListener('click', closeCourseModal);
+            courseForm.addEventListener('submit', handleCourseFormSubmit);
+            exportDataBtn.addEventListener('click', handleExport);
+            importDataBtn.addEventListener('click', () => importFileInput.click());
+            importFileInput.addEventListener('change', handleImport);
+            clearDataBtn.addEventListener('click', handleClearData);
+            closeWelcomeModalBtn.addEventListener('click', () => { welcomeModal.classList.add('modal-hidden'); localStorage.setItem('ut_tracker_welcomed', 'true'); });
             
+            coursesContainer.addEventListener('change', (e) => { if (e.target.matches('input[type="number"]')) { const { courseId, gradeKey } = e.target.dataset; let val = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)); e.target.value = val; const course = courses.find(c => c.id === parseInt(courseId)); if (course) { course.grades[gradeKey] = val; calculateCourseGrade(course); updateUI(); } } });
             coursesContainer.addEventListener('click', (e) => {
+                const editBtn = e.target.closest('.edit-btn');
                 const deleteBtn = e.target.closest('.delete-btn');
-                if (deleteBtn) {
-                    const courseId = parseInt(deleteBtn.dataset.deleteId);
-                    if(confirm('Anda yakin ingin menghapus mata kuliah ini?')) {
-                        deleteCourse(courseId);
-                    }
-                }
+                if (editBtn) { const courseId = parseInt(editBtn.dataset.editId); const course = courses.find(c => c.id === courseId); if(course) openCourseModal(course); }
+                if (deleteBtn) { const courseId = parseInt(deleteBtn.dataset.deleteId); if(confirm('Anda yakin ingin menghapus mata kuliah ini?')) { courses = courses.filter(c => c.id !== courseId); updateUI(); showToast('Mata kuliah dihapus.'); } }
             });
-            
-            categoryFilterContainer.addEventListener('click', (e) => {
-                if(e.target.matches('.filter-btn')) {
-                    activeFilter = e.target.dataset.filter;
-                    renderCourses(); // Just re-render courses, not everything
-                    renderFilters(); // To update active button style
-                }
-            });
-            
-            courseNavContainer.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A') {
-                    e.preventDefault();
-                    document.querySelector(e.target.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-                }
-            });
+            categoryFilterContainer.addEventListener('click', (e) => { if(e.target.matches('.filter-btn')) { activeFilter = e.target.dataset.filter; renderCourses(); renderFilters(); } });
+            courseNavContainer.addEventListener('click', (e) => { if (e.target.tagName === 'A') { e.preventDefault(); document.querySelector(e.target.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); } });
 
-            // Initial Load Check
+            // --- INITIALIZATION ---
             const savedUser = sessionStorage.getItem('ut_tracker_user');
-            if (savedUser) {
-                usernameInput.value = savedUser;
-                handleLogin();
-            }
+            if (savedUser) { usernameInput.value = savedUser; handleLogin(); }
         });
     </script>
-
 </body>
 </html>
 
