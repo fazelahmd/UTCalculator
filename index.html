@@ -7,7 +7,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'%3E%3C/path%3E%3Cpath d='M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4.5A2.5 2.5 0 0 1 6.5 2z'%3E%3C/path%3E%3C/svg%3E">
     
-    <!-- Google Fonts from Template -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
@@ -18,14 +18,15 @@
 
     <!-- Custom Styles -->
     <style>
-        /* --- Styles from templatemo-electric-xtra.css --- */
         :root {
             --primary-color: #FF5E00;
             --secondary-color: #00B2FF;
             --bg-color: #0a0a0a;
             --text-color: #ffffff;
-            --card-bg: rgba(10, 10, 10, 0.8);
-            --border-color: rgba(255, 94, 0, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glow-color-primary: rgba(255, 94, 0, 0.5);
+            --glow-color-secondary: rgba(0, 178, 255, 0.5);
         }
 
         body {
@@ -36,66 +37,95 @@
             position: relative;
         }
 
-        /* Animated background */
-        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 25% 25%, transparent 2%, rgba(255, 94, 0, 0.03) 2%, rgba(255, 94, 0, 0.03) 3%, transparent 3%), radial-gradient(circle at 75% 75%, transparent 2%, rgba(0, 178, 255, 0.03) 2%, rgba(0, 178, 255, 0.03) 3%, transparent 3%); background-size: 80px 80px; animation: grid-move 30s linear infinite; z-index: -2; }
-        .gradient-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 50%, rgba(255, 94, 0, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(0, 178, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8) 0%, transparent 100%); z-index: -1; animation: gradient-shift 10s ease-in-out infinite; }
-        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: linear-gradient(transparent 50%, rgba(255, 94, 0, 0.01) 50%); background-size: 100% 4px; animation: scanlines 8s linear infinite; z-index: 2; }
+        /* --- Enhanced Animated Background --- */
+        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 40px 40px; animation: grid-move 40s linear infinite; z-index: -2; }
+        .gradient-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 20%, rgba(255, 94, 0, 0.15) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 178, 255, 0.15) 0%, transparent 40%); z-index: -1; animation: gradient-shift 20s ease-in-out infinite alternate; }
+        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: linear-gradient(transparent 50%, rgba(0,0,0, 0.1) 50%); background-size: 100% 3px; animation: scanlines 10s linear infinite; z-index: 2; opacity: 0.5; }
         #particles { position: fixed; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: fixed; opacity: 0; }
-        .particle::before { content: ''; position: absolute; width: 2px; height: 2px; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color); animation: float-up 15s linear infinite; }
-        .particle.blue::before { background: var(--secondary-color); box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color); }
+        .particle::before { content: ''; position: absolute; width: 2px; height: 2px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 8px var(--primary-color), 0 0 16px var(--primary-color); animation: float-up 20s linear infinite; }
+        .particle.blue::before { background: var(--secondary-color); box-shadow: 0 0 8px var(--secondary-color), 0 0 16px var(--secondary-color); }
         
-        @keyframes grid-move { 0% { transform: translate(0, 0); } 100% { transform: translate(80px, 80px); } }
-        @keyframes gradient-shift { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(180deg); } }
-        @keyframes scanlines { 0% { transform: translateY(0); } 100% { transform: translateY(10px); } }
-        @keyframes float-up { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+        @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: 80px 80px; } }
+        @keyframes gradient-shift { 0% { transform: scale(1) rotate(0deg); opacity: 0.8; } 100% { transform: scale(1.2) rotate(30deg); opacity: 1; } }
+        @keyframes scanlines { 0% { transform: translateY(0); } 100% { transform: translateY(12px); } }
+        @keyframes float-up { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+        @keyframes glitch { 2%, 64% { transform: translate(2px, 0) skew(0deg); } 4%, 60% { transform: translate(-2px, 0) skew(0deg); } 62% { transform: translate(0, 0) skew(5deg); } }
         
         /* --- App Specific Styles --- */
         h1, h2, h3, h4, h5 { font-family: 'Orbitron', monospace; }
-        .main-title { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .main-title { 
+            position: relative;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .main-title:hover { animation: glitch 1s linear infinite; }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
-        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); backdrop-filter: blur(5px); }
-        .nav-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
+        /* Glassmorphism Cards */
+        .card, .stat-card, .nav-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            backdrop-filter: blur(15px); 
+            border-radius: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover, .stat-card:hover, .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
         
         input, select {
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(255, 94, 0, 0.3) !important;
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid var(--border-color) !important;
             color: white !important;
-            border-radius: 5px !important;
+            border-radius: 8px !important;
             transition: all 0.3s ease;
         }
-        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
         input:focus, select:focus {
             outline: none !important;
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 20px rgba(255, 94, 0, 0.3) !important;
-            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: var(--secondary-color) !important;
+            box-shadow: 0 0 15px var(--glow-color-secondary) !important;
+            background: rgba(0, 0, 0, 0.3) !important;
         }
         select option { background: #1a1a1a; }
         
-        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; transition: all 0.3s ease; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 94, 0, 0.5); }
+        .btn-primary { 
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); 
+            color: white; 
+            transition: all 0.3s ease; 
+            border: none;
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 20px var(--glow-color-primary), 0 0 30px var(--glow-color-secondary); 
+        }
         
-        .btn-secondary { background: transparent; color: var(--secondary-color); border: 1px solid var(--secondary-color); }
-        .btn-secondary:hover { background: rgba(0, 178, 255, 0.1); box-shadow: 0 0 15px rgba(0, 178, 255, 0.4); }
+        .btn-secondary { background: transparent; color: var(--secondary-color); border: 1px solid var(--secondary-color); transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(0, 178, 255, 0.1); box-shadow: 0 0 15px var(--glow-color-secondary); transform: translateY(-2px); }
 
-        .btn-danger { background: transparent; color: #ef4444; border: 1px solid #ef4444; }
-        .btn-danger:hover { background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+        .btn-danger { background: transparent; color: #ef4444; border: 1px solid #ef4444; transition: all 0.3s ease; }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); transform: translateY(-2px); }
 
         /* Modal Styles */
-        .modal-backdrop { transition: opacity 0.2s ease-in-out; }
-        .modal-content { transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
+        .modal-backdrop { transition: opacity 0.3s ease-in-out; }
+        .modal-content { 
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            backdrop-filter: blur(20px); 
+        }
         .modal-hidden { pointer-events: none; }
         .modal-hidden .modal-backdrop { opacity: 0; }
-        .modal-hidden .modal-content { opacity: 0; transform: scale(0.95); }
+        .modal-hidden .modal-content { opacity: 0; transform: translateY(20px) scale(0.98); }
 
         /* Scrollbar */
         aside::-webkit-scrollbar { width: 6px; }
         aside::-webkit-scrollbar-track { background: transparent; }
-        aside::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 20px; }
+        aside::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 20px; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -106,27 +136,27 @@
     
     <!-- Login Screen -->
     <div id="login-container" class="flex justify-center items-center min-h-screen p-4">
-        <div class="w-full max-w-sm p-8 space-y-6 card rounded-2xl shadow-lg">
+        <div class="w-full max-w-sm p-8 space-y-6 card">
             <div class="text-center">
                 <h1 class="text-2xl font-bold main-title">Selamat Datang</h1>
                 <p class="mt-2 text-sm text-gray-400">Masukkan nama pengguna untuk memulai.</p>
             </div>
             <div class="space-y-4">
-                 <div>
-                    <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Nama Pengguna</label>
-                    <input type="text" id="username" placeholder="cth: Budi" class="w-full px-3 py-2">
-                </div>
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Nama Pengguna</label>
+                        <input type="text" id="username" placeholder="cth: Budi" class="w-full px-3 py-2">
+                    </div>
                 <button id="login-btn" class="w-full btn-primary font-semibold py-2 px-4 rounded-md">Masuk</button>
             </div>
         </div>
     </div>
 
     <!-- Main App -->
-    <div id="app-container" class="container mx-auto p-4 md:p-8 max-w-5xl" style="display: none;">
+    <div id="app-container" class="container mx-auto p-4 md:p-8 max-w-5xl hidden">
         <header class="flex justify-between items-center mb-8">
             <div class="text-left">
                 <h1 class="text-3xl md:text-4xl font-bold main-title">Tracker Belajar UT</h1>
-                <p class="mt-1 text-gray-400">Pengguna: <span id="current-user" class="font-semibold text-white"></span></p>
+                <p class="mt-1 text-gray-400">Nama Mahasiswa: <span id="current-user" class="font-semibold text-white"></span></p>
             </div>
             <div class="flex items-center gap-2">
                 <button id="logout-btn" class="text-sm font-medium text-gray-400 hover:text-primary-color transition-colors">Logout</button>
@@ -135,29 +165,29 @@
 
         <div class="lg:grid lg:grid-cols-[280px,1fr] lg:gap-8">
             <aside class="mb-10 lg:mb-0 lg:sticky lg:top-8 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto pr-2">
-                <div class="nav-card p-6 rounded-2xl shadow-sm space-y-4">
+                <div class="nav-card p-6 space-y-4">
                     <div>
                         <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400">Navigator</h2>
                         <div id="category-filter" class="mt-4 flex flex-wrap gap-2"></div>
                         <nav id="course-nav" aria-label="Navigator mata kuliah" class="mt-4 flex flex-col gap-2 text-sm"></nav>
                     </div>
-                    <div class="border-t border-gray-700 pt-4">
+                    <div class="border-t border-[var(--border-color)] pt-4">
                          <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400">Pengaturan</h2>
                          <div class="mt-4 flex flex-col gap-2">
-                            <button id="add-course-modal-btn" class="w-full text-sm btn-primary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Tambah MK</button>
-                            <button id="print-report-btn" class="w-full text-sm btn-secondary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v3a2 2 0 002 2h8a2 2 0 002-2v-3h1a2 2 0 002-2v-3a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>Cetak Laporan</button>
+                             <button id="add-course-modal-btn" class="w-full text-sm btn-primary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Tambah MK</button>
+                             <button id="print-report-btn" class="w-full text-sm btn-secondary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v3a2 2 0 002 2h8a2 2 0 002-2v-3h1a2 2 0 002-2v-3a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>Cetak Laporan</button>
                          </div>
                     </div>
                 </div>
             </aside>
             <main class="space-y-8">
                 <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">Total Mata Kuliah</h3><p id="total-mk" class="text-2xl font-bold text-white">0</p></div>
-                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">Total SKS</h3><p id="total-sks" class="text-2xl font-bold text-white">0</p></div>
-                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">IPK</h3><p id="total-ip" class="text-2xl font-bold text-white">0.00</p></div>
+                    <div class="stat-card p-5 text-center"><h3 class="text-sm font-medium text-gray-400">Total Mata Kuliah</h3><p id="total-mk" class="text-2xl font-bold text-white">0</p></div>
+                    <div class="stat-card p-5 text-center"><h3 class="text-sm font-medium text-gray-400">Total SKS</h3><p id="total-sks" class="text-2xl font-bold text-white">0</p></div>
+                    <div class="stat-card p-5 text-center"><h3 class="text-sm font-medium text-gray-400">IPK</h3><p id="total-ip" class="text-2xl font-bold text-white">0.00</p></div>
                 </section>
                 
-                <section class="card p-6 rounded-2xl shadow-sm">
+                <section class="card p-6">
                     <h2 class="text-xl font-bold mb-4 text-white">Grafik Nilai Akhir</h2>
                     <div class="relative h-64">
                         <canvas id="gradeChart"></canvas>
@@ -168,8 +198,8 @@
             </main>
         </div>
 
-        <footer class="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
-             <p class="copyright">© 2025 Datamorgana UT. All rights reserved. | Design Inspired by: <a href="https://templatemo.com" target="_blank" rel="nofollow noopener">TemplateMo</a></p>
+        <footer class="mt-12 pt-8 border-t border-[var(--border-color)] text-center text-gray-400">
+             <p class="copyright">© 2025 Datamorgana. All rights reserved. | Design Inspired by: <a href="https://templatemo.com" target="_blank" rel="nofollow noopener" class="hover:text-secondary-color">TemplateMo</a></p>
         </footer>
     </div>
     
@@ -177,22 +207,22 @@
     <div id="modals-container">
         <!-- Notification Modal -->
         <div id="notification-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
-            <div class="modal-content rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
+            <div class="modal-backdrop fixed inset-0 bg-black/70"></div>
+            <div class="modal-content rounded-2xl w-full max-w-md p-6 space-y-4 relative">
                 <h2 id="notification-title" class="text-xl font-bold text-white">Notifikasi</h2>
                 <p id="notification-message" class="text-sm text-gray-300"></p>
-                <button id="close-notification-modal-btn" class="w-full btn-primary font-semibold py-2 px-4 rounded-md">Tutup</button>
+                <button id="close-notification-modal-btn" class="w-full btn-primary font-semibold py-2 px-4 rounded-md mt-4">Tutup</button>
             </div>
         </div>
 
         <!-- Confirmation Modal -->
         <div id="confirmation-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
-            <div class="modal-content rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
+            <div class="modal-backdrop fixed inset-0 bg-black/70"></div>
+            <div class="modal-content rounded-2xl w-full max-w-md p-6 space-y-4 relative">
                 <h2 id="confirmation-title" class="text-xl font-bold text-white">Konfirmasi</h2>
                 <p id="confirmation-message" class="text-sm text-gray-300"></p>
                 <div class="flex justify-end gap-3 mt-6">
-                    <button id="cancel-confirmation-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md">Batal</button>
+                    <button id="cancel-confirmation-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md transition-colors">Batal</button>
                     <button id="confirm-action-btn" class="btn-danger px-4 py-2 text-sm font-semibold rounded-md">Ya, Lanjutkan</button>
                 </div>
             </div>
@@ -200,8 +230,8 @@
 
         <!-- Course Form Modal -->
         <div id="course-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
-            <div class="modal-content rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4 relative">
+            <div class="modal-backdrop fixed inset-0 bg-black/70"></div>
+            <div class="modal-content rounded-2xl w-full max-w-lg p-6 space-y-4 relative">
                 <h2 id="course-modal-title" class="text-xl font-bold text-white">Tambah Mata Kuliah</h2>
                 <form id="course-form">
                     <input type="hidden" id="course-id-input">
@@ -211,7 +241,7 @@
                         <div class="md:col-span-2"><label for="mkScheme" class="block text-sm font-medium text-gray-300 mb-1">Skema</label><select id="mkScheme" class="w-full px-3 py-2"><option value="Tuton">Tutorial Online</option><option value="Tuweb">Tutorial Webinar</option><option value="TTM">Tutorial Tatap Muka</option><option value="Berpraktik">Berpraktik</option><option value="Berpraktikum">Berpraktikum</option><option value="Praktik">Praktik</option><option value="Praktikum">Praktikum</option><option value="Hanya UAS">Hanya UAS</option></select></div>
                     </div>
                     <div class="mt-6 flex justify-end gap-3">
-                        <button type="button" id="cancel-course-modal-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md">Batal</button>
+                        <button type="button" id="cancel-course-modal-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md transition-colors">Batal</button>
                         <button type="submit" class="btn-primary px-4 py-2 text-sm font-semibold rounded-md">Simpan</button>
                     </div>
                 </form>
@@ -238,7 +268,7 @@
             };
 
             // --- Core Logic ---
-            function getGradeDetails(score) { if (score > 80) return { letter: 'A', point: 4.0 }; if (score >= 75) return { letter: 'A-', point: 3.5 }; if (score >= 70) return { letter: 'B', point: 3.0 }; if (score >= 65) return { letter: 'B-', point: 2.5 }; if (score >= 60) return { letter: 'C', point: 2.0 }; if (score >= 55) return { letter: 'C-', point: 1.5 }; if (score >= 50) return { letter: 'D', point: 1.0 }; if (score >= 0) return { letter: 'E', point: 0.0 }; return { letter: '-', point: 0.0 }; }
+            function getGradeDetails(score) { if (score >= 85) return { letter: 'A', point: 4.0 }; if (score >= 76) return { letter: 'B', point: 3.0 }; if (score >= 66) return { letter: 'C', point: 2.0 }; if (score >= 56) return { letter: 'D', point: 1.0 }; if (score >= 0) return { letter: 'E', point: 0.0 }; return { letter: '-', point: 0.0 }; }
             function calculateFinalScore(course) { let totalTutorialScore = 0; if (['Tuton', 'Tuweb', 'TTM'].includes(course.scheme)) { const presensiDone = course.tutorial.presensi.filter(Boolean).length; let totalDiskusiNilai = 0, diskusiCount = 0; course.tutorial.nilaiDiskusi.forEach((nilai) => { const parsed = parseFloat(nilai); if (!Number.isNaN(parsed) && parsed >= 0) { totalDiskusiNilai += parsed; diskusiCount++; } }); const avgDiskusiNilai = diskusiCount > 0 ? totalDiskusiNilai / diskusiCount : 0; const presensiScore = (presensiDone / TUTORIAL_SESSIONS) * 20; const diskusiScore = (avgDiskusiNilai / 100) * 30; let totalTugasNilai = 0, tugasCount = 0; course.tutorial.tugasNilai.forEach((nilai, index) => { const parsed = parseFloat(nilai); if (course.tutorial.tugasStatus[index] && !Number.isNaN(parsed) && parsed >= 0) { totalTugasNilai += parsed; tugasCount++; } }); const avgTugasNilai = tugasCount > 0 ? totalTugasNilai / tugasCount : 0; const tugasScore = (avgTugasNilai / 100) * 50; totalTutorialScore = presensiScore + diskusiScore + tugasScore; } let totalPraktikScore = 0; if (['Berpraktik', 'Berpraktikum', 'Praktik', 'Praktikum'].includes(course.scheme)) { let totalPraktikNilai = 0, praktikCount = 0; course.praktik.nilai.forEach((nilai, index) => { const parsed = parseFloat(nilai); if (course.praktik.status[index] && !Number.isNaN(parsed) && parsed >= 0) { totalPraktikNilai += parsed; praktikCount++; } }); totalPraktikScore = praktikCount > 0 ? totalPraktikNilai / praktikCount : 0; }
                 let uasScore = 0;
                 const jumlahSoal = parseFloat(course.uas.jumlahSoal);
@@ -256,10 +286,10 @@
             function updateCourseCardSummary(courseIndex) { const course = state.courses[courseIndex]; if (!course) return; const card = document.getElementById(`course-${courseIndex}`); if (!card) return; const calculation = calculateFinalScore(course); const finalScoreEl = card.querySelector('.final-score'); const letterGradeEl = card.querySelector('.letter-grade'); const nilaiMutuEl = card.querySelector('.nilai-mutu'); if (finalScoreEl) finalScoreEl.textContent = calculation.finalScore; if (letterGradeEl) letterGradeEl.textContent = calculation.letterGrade; if (nilaiMutuEl) nilaiMutuEl.textContent = calculation.nilaiMutu; }
             function updateUASPredictionDisplay(courseIndex) { const course = state.courses[courseIndex]; if (!course) return; const card = document.getElementById(`course-${courseIndex}`); if (!card) return; const display = card.querySelector('.uas-prediction-result'); if (!display) return; const jumlahSoal = parseFloat(course.uas.jumlahSoal); const jumlahBenar = parseFloat(course.uas.jumlahBenar); let result = '...'; if (!isNaN(jumlahSoal) && jumlahSoal > 0 && !isNaN(jumlahBenar) && jumlahBenar >= 0) { result = ((100 / jumlahSoal) * Math.min(jumlahBenar, jumlahSoal)).toFixed(2); } display.textContent = result; }
             function renderAll() { renderCourses(); renderNavigation(); renderCategoryFilters(); updateSummary(); renderChart(); }
-            function renderCourses() { const visibleIndexes = []; state.courses.forEach((course, index) => { if (state.selectedCategory) { if (course.scheme === state.selectedCategory) visibleIndexes.push(index); } else if (state.selectedCourseIndex === index) { visibleIndexes.push(index); } }); const shouldShowPlaceholder = state.courses.length === 0 || (visibleIndexes.length === 0 && state.selectedCourseIndex === null && state.selectedCategory === null); dom.coursesContainer.innerHTML = ''; if (shouldShowPlaceholder) { const msg = state.courses.length === 0 ? { title: 'Belum Ada Mata Kuliah', description: 'Gunakan tombol "Tambah MK" untuk memulai.' } : { title: 'Pilih Mata Kuliah', description: 'Gunakan navigator di kiri untuk menampilkan data.' }; dom.coursesContainer.innerHTML = `<div class="card text-center py-12 px-6 rounded-2xl"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-lg font-semibold text-white">${msg.title}</h3><p class="mt-1 text-sm text-gray-400">${msg.description}</p></div>`; } else { const indexesToRender = visibleIndexes.length > 0 ? visibleIndexes : (state.selectedCourseIndex !== null ? [state.selectedCourseIndex] : []); indexesToRender.forEach(index => { const courseCard = document.createElement('div'); courseCard.id = `course-${index}`; courseCard.className = 'card p-6 rounded-2xl tracker-card scroll-mt-24'; courseCard.innerHTML = generateCourseCardHTML(state.courses[index], index); dom.coursesContainer.appendChild(courseCard); }); } }
+            function renderCourses() { const visibleIndexes = []; state.courses.forEach((course, index) => { if (state.selectedCategory) { if (course.scheme === state.selectedCategory) visibleIndexes.push(index); } else if (state.selectedCourseIndex === index) { visibleIndexes.push(index); } }); const shouldShowPlaceholder = state.courses.length === 0 || (visibleIndexes.length === 0 && state.selectedCourseIndex === null && state.selectedCategory === null); dom.coursesContainer.innerHTML = ''; if (shouldShowPlaceholder) { const msg = state.courses.length === 0 ? { title: 'Belum Ada Mata Kuliah', description: 'Gunakan tombol "Tambah MK" untuk memulai.' } : { title: 'Pilih Mata Kuliah', description: 'Gunakan navigator di kiri untuk menampilkan data.' }; dom.coursesContainer.innerHTML = `<div class="card text-center py-12 px-6"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-lg font-semibold text-white">${msg.title}</h3><p class="mt-1 text-sm text-gray-400">${msg.description}</p></div>`; } else { const indexesToRender = visibleIndexes.length > 0 ? visibleIndexes : (state.selectedCourseIndex !== null ? [state.selectedCourseIndex] : []); indexesToRender.forEach(index => { const courseCard = document.createElement('div'); courseCard.id = `course-${index}`; courseCard.className = 'card p-6 tracker-card scroll-mt-24'; courseCard.innerHTML = generateCourseCardHTML(state.courses[index], index); dom.coursesContainer.appendChild(courseCard); }); } }
             function updateSummary() { let totalSks = 0, totalNilaiMutu = 0; state.courses.forEach(course => { const sks = parseInt(course.sks, 10) || 0; if (sks > 0) { const calculation = calculateFinalScore(course); totalSks += sks; totalNilaiMutu += parseFloat(calculation.nilaiMutu); } }); const ipk = totalSks > 0 ? (totalNilaiMutu / totalSks).toFixed(2) : '0.00'; dom.totalMkEl.textContent = state.courses.length; dom.totalSksEl.textContent = totalSks; dom.totalIpEl.textContent = ipk; }
-            function renderNavigation() { dom.courseNav.innerHTML = ''; if (state.courses.length === 0) { dom.courseNav.innerHTML = '<p class="text-xs text-gray-400">Belum ada mata kuliah.</p>'; return; } const fragment = document.createDocumentFragment(); state.courses.forEach((course, index) => { const { letterGrade } = calculateFinalScore(course); const sks = parseInt(course.sks, 10) || 0; const isActive = state.selectedCategory === null && state.selectedCourseIndex === index; const button = document.createElement('button'); button.type = 'button'; button.className = `text-left rounded-lg border px-3 py-2 shadow-sm transition-all focus:outline-none ${isActive ? 'border-primary-color bg-primary-color/10 text-primary-color' : 'border-transparent text-gray-300 hover:border-primary-color/50 hover:bg-primary-color/5'}`; button.onclick = () => { state.selectedCourseIndex = index; state.selectedCategory = null; renderAll(); document.getElementById(`course-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; button.innerHTML = `<div class="flex flex-col"><span class="text-sm font-medium leading-snug text-white">${course.name}</span><span class="text-xs text-gray-400">${letterGrade} • ${sks} SKS</span></div>`; fragment.appendChild(button); }); dom.courseNav.appendChild(fragment); }
-            function renderCategoryFilters() { dom.categoryFilter.innerHTML = ''; if (state.courses.length === 0) return; const uniqueSchemes = [...new Set(state.courses.map(c => c.scheme))]; if (uniqueSchemes.length <= 1) return; const createChip = (label, value, isActive, onClick) => { const chip = document.createElement('button'); chip.type = 'button'; chip.textContent = label; chip.dataset.value = value; chip.className = `inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none ${isActive ? 'border-primary-color bg-primary-color/20 text-primary-color' : 'border-gray-700 text-gray-300 hover:border-primary-color/50 hover:text-primary-color'}`; chip.addEventListener('click', onClick); return chip; }; const allChip = createChip('Semua', 'all', state.selectedCategory === null, () => { state.selectedCategory = null; renderAll(); }); dom.categoryFilter.appendChild(allChip); uniqueSchemes.forEach(scheme => { const chip = createChip(SCHEME_DETAILS[scheme]?.label || scheme, scheme, state.selectedCategory === scheme, () => { state.selectedCategory = scheme; state.selectedCourseIndex = null; renderAll(); }); dom.categoryFilter.appendChild(chip); }); }
+            function renderNavigation() { dom.courseNav.innerHTML = ''; if (state.courses.length === 0) { dom.courseNav.innerHTML = '<p class="text-xs text-gray-400">Belum ada mata kuliah.</p>'; return; } const fragment = document.createDocumentFragment(); state.courses.forEach((course, index) => { const { letterGrade } = calculateFinalScore(course); const sks = parseInt(course.sks, 10) || 0; const isActive = state.selectedCategory === null && state.selectedCourseIndex === index; const button = document.createElement('button'); button.type = 'button'; button.className = `text-left rounded-lg border px-3 py-2 shadow-sm transition-all focus:outline-none ${isActive ? 'border-[var(--primary-color)] bg-primary-color/10 text-white shadow-[inset_0_0_10px_rgba(255,94,0,0.3)]' : 'border-transparent text-gray-300 hover:border-primary-color/50 hover:bg-primary-color/5'}`; button.onclick = () => { state.selectedCourseIndex = index; state.selectedCategory = null; renderAll(); document.getElementById(`course-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; button.innerHTML = `<div class="flex flex-col"><span class="text-sm font-medium leading-snug text-white">${course.name}</span><span class="text-xs text-gray-400">${letterGrade} • ${sks} SKS</span></div>`; fragment.appendChild(button); }); dom.courseNav.appendChild(fragment); }
+            function renderCategoryFilters() { dom.categoryFilter.innerHTML = ''; if (state.courses.length === 0) return; const uniqueSchemes = [...new Set(state.courses.map(c => c.scheme))]; if (uniqueSchemes.length <= 1) return; const createChip = (label, value, isActive, onClick) => { const chip = document.createElement('button'); chip.type = 'button'; chip.textContent = label; chip.dataset.value = value; chip.className = `inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none ${isActive ? 'border-[var(--primary-color)] bg-primary-color/20 text-white' : 'border-[var(--border-color)] text-gray-300 hover:border-primary-color/50 hover:text-white'}`; chip.addEventListener('click', onClick); return chip; }; const allChip = createChip('Semua', 'all', state.selectedCategory === null, () => { state.selectedCategory = null; renderAll(); }); dom.categoryFilter.appendChild(allChip); uniqueSchemes.forEach(scheme => { const chip = createChip(SCHEME_DETAILS[scheme]?.label || scheme, scheme, state.selectedCategory === scheme, () => { state.selectedCategory = scheme; state.selectedCourseIndex = null; renderAll(); }); dom.categoryFilter.appendChild(chip); }); }
             
             function renderChart() {
                 if (state.gradeChartInstance) { state.gradeChartInstance.destroy(); }
@@ -273,8 +303,8 @@
                         backgroundColor: state.courses.map(c => {
                             const { letterGrade } = calculateFinalScore(c);
                             const colors = {
-                                'A': '#00B2FF', 'A-': '#33CFFF', 'B': '#FF5E00', 'B-': '#FF8C4A',
-                                'C': '#E65500', 'C-': '#CC4C00', 'D': '#D92525', 'E': '#A61C1C', '-': '#555555'
+                                'A': '#00B2FF', 'B': '#33CFFF', 'C': '#FF5E00', 
+                                'D': '#E65500', 'E': '#D92525', '-': '#555555'
                             };
                             return colors[letterGrade] || colors['-'];
                         }),
@@ -320,9 +350,9 @@
                 const calculation = calculateFinalScore(course);
                 const moduleCount = getModuleCount(course.sks);
             
-                const tutorialSection = hasTutorial ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Progress Tutorial</h4><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Sesi</th><th class="p-3 text-center">Presensi</th><th class="p-3 text-center">Partisipasi Diskusi</th><th class="p-3 text-left">Nilai Diskusi</th><th class="p-3 text-left">Catatan</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: TUTORIAL_SESSIONS }, (_, i) => `<tr><td class="p-3 font-medium">${i + 1}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'presensi', ${i})" ${course.tutorial.presensi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'diskusi', ${i})" ${course.tutorial.diskusi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'nilaiDiskusi', ${i})" value="${course.tutorial.nilaiDiskusi?.[i] || ''}" class="w-24 text-sm p-2"></td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'catatanDiskusi', ${i})" value="${course.tutorial.catatanDiskusi?.[i] || ''}" class="w-full text-sm p-2"></td></tr>`).join('')}</tbody></table></div><h5 class="font-semibold mt-6 mb-3">Tugas Wajib</h5><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-center">Sesi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: TUTORIAL_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3 text-center">${i === 0 ? 3 : i === 1 ? 5 : 7}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'tugasStatus', ${i})" ${course.tutorial.tugasStatus[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'tugasNilai', ${i})" value="${course.tutorial.tugasNilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
-                const praktikSection = hasPraktik ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Progress Praktik/Praktikum</h4><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-left">Deskripsi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: PRAKTIK_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'praktikDeskripsi', ${i})" value="${course.praktik.deskripsi[i]}" class="w-full text-sm p-2"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'praktikStatus', ${i})" ${course.praktik.status[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'praktikNilai', ${i})" value="${course.praktik.nilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
-                const uasSection = hasUAS ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Persiapan UAS</h4><div class="grid md:grid-cols-2 gap-4 mb-6"><div><label class="text-sm font-medium">Jadwal UAS</label><input type="datetime-local" onchange="handlers.updateItem(event, ${index}, 'uasJadwal')" value="${course.uas.jadwal}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Target Pribadi Nilai UAS</label><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'uasTarget')" value="${course.uas.target}" class="w-full mt-1 text-sm p-2"></div></div><div class="card p-4 rounded-lg"><h5 class="font-semibold mb-3">Prediktif Nilai UAS (untuk Kalkulasi)</h5><div class="grid grid-cols-3 gap-4 items-end"><div><label class="text-sm font-medium">Jumlah Soal</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahSoal')" value="${course.uas.jumlahSoal || ''}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Jumlah Benar</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahBenar')" value="${course.uas.jumlahBenar || ''}" class="w-full mt-1 text-sm p-2"></div><div class="text-center pb-1"><p class="text-sm text-gray-400">Hasil: <span class="text-xl font-bold text-white uas-prediction-result">...</span></p></div></div></div><h5 class="font-semibold mt-6 mb-3">Checklist Belajar Modul</h5><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">${Array.from({ length: moduleCount }, (_, i) => `<div class="flex items-center gap-2"><input type="checkbox" id="modul-${index}-${i}" onchange="handlers.updateItem(event, ${index}, 'modul', ${i})" ${course.uas.modul[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"><label for="modul-${index}-${i}" class="text-sm">Modul ${i + 1}</label></div>`).join('')}</div></div>` : '';
+                const tutorialSection = hasTutorial ? `<div class="mt-6 border-t border-[var(--border-color)] pt-6"><h4 class="text-lg font-semibold mb-3">Progress Tutorial</h4><div class="overflow-x-auto rounded-lg border border-[var(--border-color)]"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Sesi</th><th class="p-3 text-center">Presensi</th><th class="p-3 text-center">Partisipasi Diskusi</th><th class="p-3 text-left">Nilai Diskusi</th><th class="p-3 text-left">Catatan</th></tr></thead><tbody class="divide-y divide-[var(--border-color)]">${Array.from({ length: TUTORIAL_SESSIONS }, (_, i) => `<tr><td class="p-3 font-medium">${i + 1}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'presensi', ${i})" ${course.tutorial.presensi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'diskusi', ${i})" ${course.tutorial.diskusi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'nilaiDiskusi', ${i})" value="${course.tutorial.nilaiDiskusi?.[i] || ''}" class="w-24 text-sm p-2"></td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'catatanDiskusi', ${i})" value="${course.tutorial.catatanDiskusi?.[i] || ''}" class="w-full text-sm p-2"></td></tr>`).join('')}</tbody></table></div><h5 class="font-semibold mt-6 mb-3">Tugas Wajib</h5><div class="overflow-x-auto rounded-lg border border-[var(--border-color)]"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-center">Sesi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-[var(--border-color)]">${Array.from({ length: TUTORIAL_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3 text-center">${i === 0 ? 3 : i === 1 ? 5 : 7}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'tugasStatus', ${i})" ${course.tutorial.tugasStatus[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'tugasNilai', ${i})" value="${course.tutorial.tugasNilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
+                const praktikSection = hasPraktik ? `<div class="mt-6 border-t border-[var(--border-color)] pt-6"><h4 class="text-lg font-semibold mb-3">Progress Praktik/Praktikum</h4><div class="overflow-x-auto rounded-lg border border-[var(--border-color)]"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-left">Deskripsi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-[var(--border-color)]">${Array.from({ length: PRAKTIK_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'praktikDeskripsi', ${i})" value="${course.praktik.deskripsi[i]}" class="w-full text-sm p-2"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'praktikStatus', ${i})" ${course.praktik.status[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'praktikNilai', ${i})" value="${course.praktik.nilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
+                const uasSection = hasUAS ? `<div class="mt-6 border-t border-[var(--border-color)] pt-6"><h4 class="text-lg font-semibold mb-3">Persiapan UAS</h4><div class="grid md:grid-cols-2 gap-4 mb-6"><div><label class="text-sm font-medium">Jadwal UAS</label><input type="datetime-local" onchange="handlers.updateItem(event, ${index}, 'uasJadwal')" value="${course.uas.jadwal}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Target Pribadi Nilai UAS</label><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'uasTarget')" value="${course.uas.target}" class="w-full mt-1 text-sm p-2"></div></div><div class="bg-black/20 p-4 rounded-lg"><h5 class="font-semibold mb-3">Prediktif Nilai UAS (untuk Kalkulasi)</h5><div class="grid grid-cols-3 gap-4 items-end"><div><label class="text-sm font-medium">Jumlah Soal</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahSoal')" value="${course.uas.jumlahSoal || ''}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Jumlah Benar</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahBenar')" value="${course.uas.jumlahBenar || ''}" class="w-full mt-1 text-sm p-2"></div><div class="text-center pb-1"><p class="text-sm text-gray-400">Hasil: <span class="text-xl font-bold text-white uas-prediction-result">...</span></p></div></div></div><h5 class="font-semibold mt-6 mb-3">Checklist Belajar Modul</h5><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">${Array.from({ length: moduleCount }, (_, i) => `<div class="flex items-center gap-2"><input type="checkbox" id="modul-${index}-${i}" onchange="handlers.updateItem(event, ${index}, 'modul', ${i})" ${course.uas.modul[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"><label for="modul-${index}-${i}" class="text-sm">Modul ${i + 1}</label></div>`).join('')}</div></div>` : '';
             
                 return `<div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"><div><h3 class="text-xl font-bold text-white">${course.name}</h3><p class="text-sm text-gray-400">${course.sks} SKS • <span class="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full text-xs ${detail.badgeClass}">${detail.label}</span></p></div><div class="flex items-center gap-1"><button onclick="handlers.openCourseModal(${index})" class="text-gray-400 hover:text-secondary-color p-2 rounded-full transition-colors"><span class="sr-only">Edit</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button onclick="handlers.deleteCourse(${index})" class="text-gray-400 hover:text-red-500 p-2 rounded-full transition-colors"><span class="sr-only">Hapus</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button></div></div><div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-black/20 p-4 rounded-xl"><div><p class="text-xs uppercase text-gray-400">Nilai Akhir</p><p class="text-2xl font-bold final-score">${calculation.finalScore}</p></div><div><p class="text-xs uppercase text-gray-400">Nilai Huruf</p><p class="text-2xl font-bold letter-grade">${calculation.letterGrade}</p></div><div><p class="text-xs uppercase text-gray-400">Nilai Mutu</p><p class="text-2xl font-bold nilai-mutu">${calculation.nilaiMutu}</p></div></div>${tutorialSection}${praktikSection}${uasSection}`;
             }
@@ -342,7 +372,7 @@
                     renderNavigation(); 
                     renderChart(); 
                 },
-                handleLogin: () => { const username = dom.usernameInput.value.trim(); if (!username) return handlers.showNotification('Error', 'Nama pengguna tidak boleh kosong.'); state.currentUser = username; sessionStorage.setItem('ut_tracker_user', username); dom.loginContainer.style.display = 'none'; dom.appContainer.style.display = 'block'; dom.currentUserEl.textContent = state.currentUser; handlers.loadData(); state.selectedCourseIndex = state.courses.length > 0 ? 0 : null; state.selectedCategory = null; renderAll(); createParticles(); },
+                handleLogin: () => { const username = dom.usernameInput.value.trim(); if (!username) return handlers.showNotification('Error', 'Nama pengguna tidak boleh kosong.'); state.currentUser = username; sessionStorage.setItem('ut_tracker_user', username); dom.loginContainer.style.display = 'none'; dom.appContainer.classList.remove('hidden'); dom.appContainer.style.display = 'block'; dom.currentUserEl.textContent = state.currentUser; handlers.loadData(); state.selectedCourseIndex = state.courses.length > 0 ? 0 : null; state.selectedCategory = null; renderAll(); createParticles(); },
                 handleLogout: () => { sessionStorage.removeItem('ut_tracker_user'); window.location.reload(); },
                 openCourseModal: (index = null) => { dom.courseModal.form.reset(); if (index !== null && state.courses[index]) { const course = state.courses[index]; dom.courseModal.title.textContent = 'Edit Mata Kuliah'; dom.courseModal.idInput.value = index; dom.courseModal.form.mkName.value = course.name; dom.courseModal.form.mkSks.value = course.sks; dom.courseModal.form.mkScheme.value = course.scheme; } else { dom.courseModal.title.textContent = 'Tambah Mata Kuliah Baru'; dom.courseModal.idInput.value = ''; } dom.courseModal.el.classList.remove('modal-hidden'); },
                 closeCourseModal: () => dom.courseModal.el.classList.add('modal-hidden'),
@@ -432,38 +462,33 @@
                                 <title>Laporan Nilai - ${state.currentUser}</title>
                                 <script src="https://cdn.tailwindcss.com"><\/script>
                                 <style>
-                                    body { font-family: 'Rajdhani', sans-serif; background: #1a1a1a; color: #f0f0f0; }
+                                    body { font-family: 'Rajdhani', sans-serif; background: #fff; color: #000; }
                                     .report-container { max-width: 800px; margin: auto; padding: 2rem; }
-                                    .course-block { border: 1px solid #444; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
-                                    .course-header { background: #2a2a2a; padding: 1rem; }
+                                    .course-block { border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; page-break-inside: avoid; }
+                                    .course-header { background: #eee; padding: 1rem; border-bottom: 1px solid #ccc;}
                                     .course-body { padding: 1rem; }
                                     table { width: 100%; border-collapse: collapse; }
-                                    th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #333; }
-                                    th { background: #222; }
-                                    @media print {
-                                        body { background: #fff; color: #000; }
-                                        .no-print { display: none; }
-                                        .report-container { padding: 0; }
-                                        .course-block { border: 1px solid #ccc; page-break-inside: avoid; }
-                                    }
+                                    th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #ddd; }
+                                    th { background: #f7f7f7; }
+                                    @media print { .no-print { display: none; } .report-container { padding: 0; } }
                                 </style>
                             </head>
                             <body>
                                 <div class="report-container">
                                     <div class="flex justify-between items-center mb-8">
                                         <div>
-                                            <h1 class="text-3xl font-bold" style="color: var(--primary-color);">Laporan Nilai</h1>
+                                            <h1 class="text-3xl font-bold">Laporan Nilai</h1>
                                             <p class="text-lg">Pengguna: ${state.currentUser}</p>
                                         </div>
                                         <button onclick="window.print()" class="no-print bg-blue-600 text-white font-bold py-2 px-4 rounded">Print Dokumen</button>
                                     </div>
                                     <div class="grid grid-cols-2 gap-4 mb-8 text-center">
-                                        <div class="bg-gray-800 p-4 rounded">
-                                            <p class="text-sm uppercase text-gray-400">Total SKS</p>
+                                        <div class="bg-gray-100 p-4 rounded-lg">
+                                            <p class="text-sm uppercase text-gray-600">Total SKS</p>
                                             <p class="text-2xl font-bold">${totalSks}</p>
                                         </div>
-                                        <div class="bg-gray-800 p-4 rounded">
-                                            <p class="text-sm uppercase text-gray-400">IPK</p>
+                                        <div class="bg-gray-100 p-4 rounded-lg">
+                                            <p class="text-sm uppercase text-gray-600">IPK</p>
                                             <p class="text-2xl font-bold">${ipk}</p>
                                         </div>
                                     </div>
@@ -475,14 +500,14 @@
                             <div class="course-block">
                                 <div class="course-header">
                                     <h2 class="text-xl font-bold">${course.name} (${course.sks} SKS)</h2>
-                                    <p class="text-sm text-gray-400">${SCHEME_DETAILS[course.scheme].label}</p>
+                                    <p class="text-sm text-gray-600">${SCHEME_DETAILS[course.scheme].label}</p>
                                 </div>
                                 <div class="course-body">
                                     <h3 class="font-bold mb-2">Hasil Akhir</h3>
                                     <div class="grid grid-cols-3 gap-2 mb-4 text-center">
-                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Akhir</p><p class="font-bold">${calc.finalScore}</p></div>
-                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Huruf</p><p class="font-bold">${calc.letterGrade}</p></div>
-                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Mutu</p><p class="font-bold">${calc.nilaiMutu}</p></div>
+                                        <div class="bg-gray-100 p-2 rounded"><p class="text-xs text-gray-500">Nilai Akhir</p><p class="font-bold">${calc.finalScore}</p></div>
+                                        <div class="bg-gray-100 p-2 rounded"><p class="text-xs text-gray-500">Nilai Huruf</p><p class="font-bold">${calc.letterGrade}</p></div>
+                                        <div class="bg-gray-100 p-2 rounded"><p class="text-xs text-gray-500">Nilai Mutu</p><p class="font-bold">${calc.nilaiMutu}</p></div>
                                     </div>
                         `;
                         if (['Tuton', 'Tuweb', 'TTM'].includes(course.scheme)) {
@@ -517,7 +542,7 @@
             };
 
             // --- Particle Creation ---
-            function createParticles() { const cont = document.getElementById('particles'); cont.innerHTML = ''; const count = 30; for (let i = 0; i < count; i++) { const p = document.createElement('div'); p.className = 'particle' + (Math.random() > 0.5 ? ' blue' : ''); p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 15 + 's'; p.style.animationDuration = (Math.random() * 10 + 15) + 's'; cont.appendChild(p); } }
+            function createParticles() { const cont = document.getElementById('particles'); cont.innerHTML = ''; const count = 30; for (let i = 0; i < count; i++) { const p = document.createElement('div'); p.className = 'particle' + (Math.random() > 0.5 ? ' blue' : ''); p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 20 + 's'; p.style.animationDuration = (Math.random() * 10 + 15) + 's'; cont.appendChild(p); } }
 
             // --- Event Listeners & Init ---
             function setupListeners() {
@@ -540,4 +565,3 @@
     </script>
 </body>
 </html>
-
