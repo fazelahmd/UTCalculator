@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracker Belajar UT</title>
+    <title>Tracker Belajar UT - Cyberpunk Edition</title>
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'%3E%3C/path%3E%3Cpath d='M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4.5A2.5 2.5 0 0 1 6.5 2z'%3E%3C/path%3E%3C/svg%3E">
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts from Template -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,71 +16,107 @@
     <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Theme Initializer Script -->
-    <script>
-        (function() {
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        })();
-    </script>
-
     <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .theme-icon.sun { display: none; }
-        .theme-icon.moon { display: block; }
-        html.dark .theme-icon.sun { display: block; }
-        html.dark .theme-icon.moon { display: none; }
+        /* --- Styles from templatemo-electric-xtra.css --- */
+        :root {
+            --primary-color: #FF5E00;
+            --secondary-color: #00B2FF;
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --card-bg: rgba(10, 10, 10, 0.8);
+            --border-color: rgba(255, 94, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 25% 25%, transparent 2%, rgba(255, 94, 0, 0.03) 2%, rgba(255, 94, 0, 0.03) 3%, transparent 3%), radial-gradient(circle at 75% 75%, transparent 2%, rgba(0, 178, 255, 0.03) 2%, rgba(0, 178, 255, 0.03) 3%, transparent 3%); background-size: 80px 80px; animation: grid-move 30s linear infinite; z-index: -2; }
+        .gradient-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 50%, rgba(255, 94, 0, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(0, 178, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8) 0%, transparent 100%); z-index: -1; animation: gradient-shift 10s ease-in-out infinite; }
+        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: linear-gradient(transparent 50%, rgba(255, 94, 0, 0.01) 50%); background-size: 100% 4px; animation: scanlines 8s linear infinite; z-index: 2; }
+        #particles { position: fixed; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .particle { position: fixed; opacity: 0; }
+        .particle::before { content: ''; position: absolute; width: 2px; height: 2px; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color); animation: float-up 15s linear infinite; }
+        .particle.blue::before { background: var(--secondary-color); box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color); }
+        
+        @keyframes grid-move { 0% { transform: translate(0, 0); } 100% { transform: translate(80px, 80px); } }
+        @keyframes gradient-shift { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(180deg); } }
+        @keyframes scanlines { 0% { transform: translateY(0); } 100% { transform: translateY(10px); } }
+        @keyframes float-up { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+        
+        /* --- App Specific Styles --- */
+        h1, h2, h3, h4, h5 { font-family: 'Orbitron', monospace; }
+        .main-title { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); backdrop-filter: blur(5px); }
+        .nav-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
+        
+        input, select {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 94, 0, 0.3) !important;
+            color: white !important;
+            border-radius: 5px !important;
+            transition: all 0.3s ease;
+        }
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+        input:focus, select:focus {
+            outline: none !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 20px rgba(255, 94, 0, 0.3) !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+        select option { background: #1a1a1a; }
+        
+        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 94, 0, 0.5); }
+        
+        .btn-secondary { background: transparent; color: var(--secondary-color); border: 1px solid var(--secondary-color); }
+        .btn-secondary:hover { background: rgba(0, 178, 255, 0.1); box-shadow: 0 0 15px rgba(0, 178, 255, 0.4); }
+
+        .btn-danger { background: transparent; color: #ef4444; border: 1px solid #ef4444; }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+
+        /* Modal Styles */
+        .modal-backdrop { transition: opacity 0.2s ease-in-out; }
+        .modal-content { transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out; background: var(--card-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px); }
+        .modal-hidden { pointer-events: none; }
+        .modal-hidden .modal-backdrop { opacity: 0; }
+        .modal-hidden .modal-content { opacity: 0; transform: scale(0.95); }
+
+        /* Scrollbar */
         aside::-webkit-scrollbar { width: 6px; }
         aside::-webkit-scrollbar-track { background: transparent; }
-        aside::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        html.dark aside::-webkit-scrollbar-thumb { background-color: #475569; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .course-card-animation { animation: fadeIn 0.3s ease-out forwards; }
-        
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes toastOut {
-            to { opacity: 0; transform: translateY(20px); }
-        }
-        .toast { animation: toastIn 0.3s ease-out forwards, toastOut 0.3s ease-in 2.7s forwards; }
-
-        .modal-backdrop {
-            transition: opacity 0.2s ease-in-out;
-        }
-        .modal-content {
-            transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-        }
-        .modal-hidden .modal-backdrop { opacity: 0; pointer-events: none; }
-        .modal-hidden .modal-content { opacity: 0; transform: scale(0.95); }
-        
-        #app-container, #login-container { transition: opacity 0.3s; }
+        aside::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 20px; }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 min-h-screen">
+<body class="min-h-screen">
+    <div class="grid-bg"></div>
+    <div class="gradient-overlay"></div>
+    <div class="scanlines"></div>
+    <div id="particles"></div>
     
     <!-- Login Screen -->
     <div id="login-container" class="flex justify-center items-center min-h-screen p-4">
-        <div class="w-full max-w-sm p-8 space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-lg">
+        <div class="w-full max-w-sm p-8 space-y-6 card rounded-2xl shadow-lg">
             <div class="text-center">
-                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Selamat Datang</h1>
-                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Masukkan nama pengguna untuk memulai atau memuat data Anda.</p>
+                <h1 class="text-2xl font-bold main-title">Selamat Datang</h1>
+                <p class="mt-2 text-sm text-gray-400">Masukkan nama pengguna untuk memulai.</p>
             </div>
             <div class="space-y-4">
                  <div>
-                    <label for="username" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Nama Pengguna</label>
-                    <input type="text" id="username" placeholder="cth: Budi" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Nama Pengguna</label>
+                    <input type="text" id="username" placeholder="cth: Budi" class="w-full px-3 py-2">
                 </div>
-                <button id="login-btn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">Masuk</button>
+                <button id="login-btn" class="w-full btn-primary font-semibold py-2 px-4 rounded-md">Masuk</button>
             </div>
         </div>
     </div>
@@ -91,251 +125,371 @@
     <div id="app-container" class="container mx-auto p-4 md:p-8 max-w-5xl" style="display: none;">
         <header class="flex justify-between items-center mb-8">
             <div class="text-left">
-                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Tracker Belajar UT</h1>
-                <p class="mt-1 text-slate-500 dark:text-slate-400">Pengguna: <span id="current-user" class="font-semibold"></span></p>
+                <h1 class="text-3xl md:text-4xl font-bold main-title">Tracker Belajar UT</h1>
+                <p class="mt-1 text-gray-400">Pengguna: <span id="current-user" class="font-semibold text-white"></span></p>
             </div>
             <div class="flex items-center gap-2">
-                <button id="logout-btn" class="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Logout</button>
-                <button id="theme-toggle" class="relative w-10 h-10 flex items-center justify-center rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-950 focus:ring-blue-500 transition-all"><span class="sr-only">Toggle tema</span><svg class="h-6 w-6 theme-icon sun" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg><svg class="h-6 w-6 theme-icon moon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg></button>
+                <button id="logout-btn" class="text-sm font-medium text-gray-400 hover:text-primary-color transition-colors">Logout</button>
             </div>
         </header>
 
-        <div class="lg:grid lg:grid-cols-[260px,1fr] lg:gap-8">
-            <aside class="mb-10 lg:mb-0 lg:sticky lg:top-8 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto">
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="lg:grid lg:grid-cols-[280px,1fr] lg:gap-8">
+            <aside class="mb-10 lg:mb-0 lg:sticky lg:top-8 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto pr-2">
+                <div class="nav-card p-6 rounded-2xl shadow-sm space-y-4">
                     <div>
-                        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Navigator</h2>
+                        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400">Navigator</h2>
                         <div id="category-filter" class="mt-4 flex flex-wrap gap-2"></div>
-                        <nav id="course-nav" aria-label="Navigator mata kuliah" class="mt-4 flex flex-col gap-1 text-sm"></nav>
+                        <nav id="course-nav" aria-label="Navigator mata kuliah" class="mt-4 flex flex-col gap-2 text-sm"></nav>
                     </div>
-                    <div class="border-t border-slate-200/70 dark:border-slate-800 pt-4">
-                         <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Pengaturan Data</h2>
+                    <div class="border-t border-gray-700 pt-4">
+                         <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-400">Pengaturan</h2>
                          <div class="mt-4 flex flex-col gap-2">
-                            <button id="add-course-modal-btn" class="w-full text-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Tambah MK</button>
-                            <button id="export-data-btn" class="w-full text-sm text-slate-700 dark:text-slate-200 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>Ekspor Data</button>
-                            <button id="import-data-btn" class="w-full text-sm text-slate-700 dark:text-slate-200 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>Impor Data</button>
-                            <button id="clear-data-btn" class="w-full text-sm text-red-600 bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400 dark:hover:bg-red-900/60 font-semibold py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>Hapus Semua Data</button>
-                            <input type="file" id="import-file-input" class="hidden" accept=".json">
+                            <button id="add-course-modal-btn" class="w-full text-sm btn-primary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>Tambah MK</button>
+                            <button id="print-report-btn" class="w-full text-sm btn-secondary font-semibold py-2 px-3 rounded-md flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v3a2 2 0 002 2h8a2 2 0 002-2v-3h1a2 2 0 002-2v-3a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" /></svg>Cetak Laporan</button>
                          </div>
                     </div>
                 </div>
             </aside>
             <main class="space-y-8">
                 <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Mata Kuliah</h3><p id="total-mk" class="text-2xl font-bold text-slate-900 dark:text-white">0</p></div>
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total SKS</h3><p id="total-sks" class="text-2xl font-bold text-slate-900 dark:text-white">0</p></div>
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 text-center shadow-sm"><h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Indeks Prestasi (IP)</h3><p id="total-ip" class="text-2xl font-bold text-slate-900 dark:text-white">0.00</p></div>
+                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">Total Mata Kuliah</h3><p id="total-mk" class="text-2xl font-bold text-white">0</p></div>
+                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">Total SKS</h3><p id="total-sks" class="text-2xl font-bold text-white">0</p></div>
+                    <div class="stat-card p-5 rounded-2xl text-center shadow-sm"><h3 class="text-sm font-medium text-gray-400">IPK</h3><p id="total-ip" class="text-2xl font-bold text-white">0.00</p></div>
                 </section>
                 
-                <section class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm"><h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Grafik Nilai Mata Kuliah</h2><div class="relative h-64"><canvas id="gradeChart"></canvas></div></section>
+                <section class="card p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-xl font-bold mb-4 text-white">Grafik Nilai Akhir</h2>
+                    <div class="relative h-64">
+                        <canvas id="gradeChart"></canvas>
+                    </div>
+                </section>
 
-                <section><div id="courses-container" class="space-y-6"></div></section>
+                <section id="courses-container" class="space-y-6"></section>
             </main>
         </div>
 
-        <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400">
-            <div class="social-links flex justify-center items-center gap-6"><a href="https://github.com/imrosyd" target="_blank" rel="noopener noreferrer" title="GitHub" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">GitHub</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.55v-2.15c-3.2.7-3.88-1.54-3.88-1.54-.53-1.36-1.3-1.72-1.3-1.72-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.77 2.73 1.26 3.39.96.1-.75.41-1.26.74-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.68.42.36.8 1.07.8 2.15v3.18c0 .3.2.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.74 18.27.5 12 .5Z"/></svg></a><a href="https://www.linkedin.com/in/imrosyd" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">LinkedIn</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.4c0-1.29-.02-2.95-1.8-2.95-1.81 0-2.09 1.42-2.09 2.87v5.48h-3.55V9h3.41v1.56h.05c.47-.89 1.62-1.82 3.33-1.82 3.56 0 4.21 2.34 4.21 5.39v6.32zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zm1.78 13.02H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a><a href="https://www.instagram.com/imrosyd" target="_blank" rel="noopener noreferrer" title="Instagram" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><span class="sr-only">Instagram</span><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zm4.5 3.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 2a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5zm5.75-.88a1.13 1.13 0 1 1-2.25 0 1.13 1.13 0 0 1 2.25 0z"/></svg></a></div><p class="mt-4 text-sm">Dibuat dengan ❤️ oleh imrosyd</p>
+        <footer class="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
+             <p class="copyright">© 2025 Tracker Belajar UT. All rights reserved. | Design Inspired by: <a href="https://templatemo.com" target="_blank" rel="nofollow noopener">TemplateMo</a></p>
         </footer>
     </div>
     
-    <!-- Modals and Toasts Container -->
+    <!-- Modals Container -->
     <div id="modals-container">
-        <!-- Welcome Modal -->
-        <div id="welcome-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="modal-backdrop fixed inset-0 bg-black/40 dark:bg-black/60"></div>
-            <div class="modal-content bg-white dark:bg-slate-900 rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Selamat Datang di UT Tracker!</h2>
-                <p class="text-sm text-slate-600 dark:text-slate-300">Aplikasi ini membantumu melacak progres belajar di Universitas Terbuka. Semua data disimpan secara lokal di browser-mu.</p>
-                <ul class="text-sm text-slate-600 dark:text-slate-300 list-disc list-inside space-y-1">
-                    <li>Tambahkan mata kuliah beserta skema nilainya.</li>
-                    <li>Isi nilaimu untuk melihat kalkulasi nilai akhir dan IPK.</li>
-                    <li>Gunakan fitur <b>Ekspor Data</b> untuk backup dan <b>Impor Data</b> untuk memuatnya kembali.</li>
-                </ul>
-                <button id="close-welcome-modal" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Mulai Gunakan</button>
+        <!-- Notification Modal -->
+        <div id="notification-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
+            <div class="modal-content rounded-2xl shadow-lg w-full max-w-md p-6 space-y-4 relative">
+                <h2 id="notification-title" class="text-xl font-bold text-white">Notifikasi</h2>
+                <p id="notification-message" class="text-sm text-gray-300"></p>
+                <button id="close-notification-modal-btn" class="w-full btn-primary font-semibold py-2 px-4 rounded-md">Tutup</button>
             </div>
         </div>
 
-        <!-- Course Form Modal (for Add/Edit) -->
+        <!-- Course Form Modal -->
         <div id="course-modal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div class="modal-backdrop fixed inset-0 bg-black/40 dark:bg-black/60"></div>
-            <div class="modal-content bg-white dark:bg-slate-900 rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4 relative">
-                <h2 id="course-modal-title" class="text-xl font-bold text-slate-900 dark:text-white">Tambah Mata Kuliah</h2>
+            <div class="modal-backdrop fixed inset-0 bg-black/60"></div>
+            <div class="modal-content rounded-2xl shadow-lg w-full max-w-lg p-6 space-y-4 relative">
+                <h2 id="course-modal-title" class="text-xl font-bold text-white">Tambah Mata Kuliah</h2>
                 <form id="course-form">
                     <input type="hidden" id="course-id-input">
                     <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                        <div class="md:col-span-3"><label for="mkName" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Kode & Nama Mata Kuliah</label><input type="text" id="mkName" placeholder="e.g., MKDU4111 PKn" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
-                        <div class="md:col-span-1"><label for="mkSks" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">SKS</label><input type="number" id="mkSks" placeholder="3" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required min="1"></div>
-                        <div class="md:col-span-2"><label for="mkScheme" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Skema Penilaian</label><select id="mkScheme" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="Tuton">Tutorial Online</option><option value="Tuweb">Tutorial Webinar</option><option value="TTM">Tutorial Tatap Muka</option><option value="Praktik">Praktik/Praktikum</option><option value="Hanya UAS">Hanya UAS</option></select></div>
+                        <div class="md:col-span-3"><label for="mkName" class="block text-sm font-medium text-gray-300 mb-1">Kode & Nama</label><input type="text" id="mkName" placeholder="e.g., MKDU4111 PKn" class="w-full px-3 py-2" required></div>
+                        <div class="md:col-span-1"><label for="mkSks" class="block text-sm font-medium text-gray-300 mb-1">SKS</label><input type="number" id="mkSks" placeholder="3" class="w-full px-3 py-2" required min="1"></div>
+                        <div class="md:col-span-2"><label for="mkScheme" class="block text-sm font-medium text-gray-300 mb-1">Skema</label><select id="mkScheme" class="w-full px-3 py-2"><option value="Tuton">Tutorial Online</option><option value="Tuweb">Tutorial Webinar</option><option value="TTM">Tutorial Tatap Muka</option><option value="Berpraktik">Berpraktik</option><option value="Berpraktikum">Berpraktikum</option><option value="Praktik">Praktik</option><option value="Praktikum">Praktikum</option><option value="Hanya UAS">Hanya UAS</option></select></div>
                     </div>
                     <div class="mt-6 flex justify-end gap-3">
-                        <button type="button" id="cancel-course-modal" class="px-4 py-2 text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-md">Batal</button>
-                        <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md">Simpan</button>
+                        <button type="button" id="cancel-course-modal-btn" class="px-4 py-2 text-sm font-semibold bg-gray-700 hover:bg-gray-600 rounded-md">Batal</button>
+                        <button type="submit" class="btn-primary px-4 py-2 text-sm font-semibold rounded-md">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
-
-    <!-- Main Application Logic -->
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM ELEMENTS ---
-            const themeToggle = document.getElementById('theme-toggle');
-            const loginContainer = document.getElementById('login-container');
-            const appContainer = document.getElementById('app-container');
-            const usernameInput = document.getElementById('username');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
-            const currentUserEl = document.getElementById('current-user');
-            const coursesContainer = document.getElementById('courses-container');
-            const totalMkEl = document.getElementById('total-mk');
-            const totalSksEl = document.getElementById('total-sks');
-            const totalIpEl = document.getElementById('total-ip');
-            const categoryFilterContainer = document.getElementById('category-filter');
-            const courseNavContainer = document.getElementById('course-nav');
-            const gradeChartCanvas = document.getElementById('gradeChart');
-            const addCourseModalBtn = document.getElementById('add-course-modal-btn');
-            const exportDataBtn = document.getElementById('export-data-btn');
-            const importDataBtn = document.getElementById('import-data-btn');
-            const importFileInput = document.getElementById('import-file-input');
-            const clearDataBtn = document.getElementById('clear-data-btn');
-            const courseModal = document.getElementById('course-modal');
-            const courseModalTitle = document.getElementById('course-modal-title');
-            const courseForm = document.getElementById('course-form');
-            const cancelCourseModalBtn = document.getElementById('cancel-course-modal');
-            const courseIdInput = document.getElementById('course-id-input');
-            const welcomeModal = document.getElementById('welcome-modal');
-            const closeWelcomeModalBtn = document.getElementById('close-welcome-modal');
-            
-            // --- STATE MANAGEMENT ---
-            let courses = [];
-            let activeFilter = 'All';
-            let currentUser = null;
-            let gradeChartInstance = null;
-            const SCHEMES = {'Tuton':{name:'Tutorial Online',contribution:0.3,components:[{key:'partisipasi',label:'Kehadiran',weight:0.2},{key:'diskusi',label:'Rata-rata Diskusi',weight:0.3},{key:'tugas',label:'Rata-rata Tugas',weight:0.5},{key:'uas',label:'Nilai UAS',weight:0.7}] },'TTM':{name:'Tutorial Tatap Muka',contribution:0.4,components:[{key:'partisipasi',label:'Kehadiran',weight:0.2},{key:'diskusi',label:'Partisipasi Kelas',weight:0.3},{key:'tugas',label:'Rata-rata Tugas',weight:0.5},{key:'uas',label:'Nilai UAS',weight:0.6}] },'Tuweb':{name:'Tutorial Webinar',contribution:0.2,components:[{key:'partisipasi',label:'Kehadiran',weight:1},{key:'uas',label:'Nilai UAS',weight:0.8}] },'Praktik':{name:'Praktik/Praktikum',contribution:0.5,components:[{key:'laporan',label:'Nilai Laporan',weight:1},{key:'uas',label:'Ujian Akhir Praktik',weight:0.5}] },'Hanya UAS':{name:'Hanya UAS',contribution:0,components:[{key:'uas',label:'Nilai UAS',weight:1}] } };
-            const gradeConverter = (s)=>{if(s>=85)return{grade:'A',point:4,color:'rgba(74, 222, 128, 0.6)'};if(s>=70)return{grade:'B',point:3,color:'rgba(96, 165, 250, 0.6)'};if(s>=55)return{grade:'C',point:2,color:'rgba(251, 191, 36, 0.6)'};if(s>=40)return{grade:'D',point:1,color:'rgba(249, 115, 22, 0.6)'};return{grade:'E',point:0,color:'rgba(239, 68, 68, 0.6)'}};
-            
-            // --- CORE FUNCTIONS ---
-            const saveData = () => { if (currentUser) localStorage.setItem(`ut_courses_${currentUser}`, JSON.stringify(courses)); };
-            const loadData = () => { if (currentUser) courses = JSON.parse(localStorage.getItem(`ut_courses_${currentUser}`)) || []; };
-            const calculateCourseGrade = (c) => {
-                const s=SCHEMES[c.scheme]; if(!s)return; let u=parseFloat(c.grades.uas)||0,t=0; if(s.contribution>0){let w=0,v=0;s.components.forEach(p=>{if(p.key!=='uas'){const g=parseFloat(c.grades[p.key])||0;v+=g*p.weight;w+=p.weight}});t=w>0?v/w:0} const f=u>=30?t*s.contribution+u*(1-s.contribution):u; const{grade:g,point:p}=gradeConverter(f);c.finalScore=f.toFixed(2);c.finalGrade=g;c.gradePoint=p;
+            // --- Constants & Global State ---
+            const MODULES_PER_SKS = 3; const TUTORIAL_SESSIONS = 8; const TUTORIAL_TASKS = 3; const PRAKTIK_TASKS = 3;
+            const SCHEME_DETAILS = {
+                Tuton: { label: 'Tutorial Online', badgeClass: 'bg-blue-900/50 text-blue-200' }, Tuweb: { label: 'Tutorial Webinar', badgeClass: 'bg-sky-900/50 text-sky-200' }, TTM: { label: 'Tutorial Tatap Muka', badgeClass: 'bg-teal-900/50 text-teal-200' }, Berpraktik: { label: 'Berpraktik', badgeClass: 'bg-emerald-900/50 text-emerald-200' }, Berpraktikum: { label: 'Berpraktikum', badgeClass: 'bg-green-900/50 text-green-200' }, Praktik: { label: 'Praktik', badgeClass: 'bg-lime-900/50 text-lime-200' }, Praktikum: { label: 'Praktikum', badgeClass: 'bg-amber-900/50 text-amber-200' }, 'Hanya UAS': { label: 'Hanya UAS', badgeClass: 'bg-slate-700/70 text-slate-200' }
             };
-            const updateStats = () => { const tS = courses.reduce((s, c) => s + c.sks, 0); const tMk = courses.length; let tWp = 0; courses.forEach(c => {tWp += c.gradePoint * c.sks;}); const ip = tS > 0 ? (tWp / tS) : 0; totalMkEl.textContent = tMk; totalSksEl.textContent = tS; totalIpEl.textContent = ip.toFixed(2);};
+            let state = { currentUser: null, courses: [], selectedCourseIndex: null, selectedCategory: null, gradeChartInstance: null };
 
-            // --- RENDER FUNCTIONS ---
-            const renderCourses = () => {
-                coursesContainer.innerHTML = ''; courseNavContainer.innerHTML = '';
-                const filtered = courses.filter(c => activeFilter === 'All' || c.scheme === activeFilter);
-                if (filtered.length === 0) { coursesContainer.innerHTML = `<div class="text-center py-10 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-sm font-medium text-slate-900 dark:text-white">Belum Ada Mata Kuliah</h3><p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gunakan tombol 'Tambah MK' di samping untuk memulai.</p></div>`; }
-                filtered.forEach(c => {
-                    const el = document.createElement('div'); el.id = `course-${c.id}`; el.className = 'course-card-animation bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-sm space-y-4';
-                    const s = SCHEMES[c.scheme]; const inputs = s.components.map(p => `<div class="flex-1 min-w-[120px]"><label for="${p.key}-${c.id}" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">${p.label}</label><input type="number" id="${p.key}-${c.id}" data-course-id="${c.id}" data-grade-key="${p.key}" class="w-full text-sm px-2 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="0" max="100" step="1" value="${c.grades[p.key]||''}" placeholder="0-100"></div>`).join('');
-                    el.innerHTML = `<div class="flex justify-between items-start gap-2"><div><h3 class="text-lg font-bold text-slate-900 dark:text-white">${c.name}</h3><div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1"><span class="font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">${c.sks} SKS</span><span>${s.name}</span></div></div><div class="flex gap-1"><button data-edit-id="${c.id}" class="edit-btn text-slate-400 hover:text-blue-500 p-1 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button data-delete-id="${c.id}" class="delete-btn text-slate-400 hover:text-red-500 p-1 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button></div></div><div class="flex flex-wrap items-end gap-4 border-t border-slate-200/70 dark:border-slate-800 pt-4">${inputs}</div><div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg mt-4"><p class="text-sm text-slate-600 dark:text-slate-300">Nilai Akhir: <span class="font-bold text-lg text-slate-900 dark:text-white">${c.finalScore}</span></p><p class="text-sm text-slate-600 dark:text-slate-300">Grade: <span class="font-bold text-lg text-slate-900 dark:text-white">${c.finalGrade}</span></p></div>`;
-                    coursesContainer.appendChild(el); const navLink = document.createElement('a'); navLink.href = `#course-${c.id}`; navLink.className = 'block font-medium text-slate-600 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors truncate'; navLink.textContent = c.name; courseNavContainer.appendChild(navLink);
-                });
+            // --- DOM Elements ---
+            const dom = {
+                loginContainer: document.getElementById('login-container'), appContainer: document.getElementById('app-container'), usernameInput: document.getElementById('username'), loginBtn: document.getElementById('login-btn'), logoutBtn: document.getElementById('logout-btn'), currentUserEl: document.getElementById('current-user'), coursesContainer: document.getElementById('courses-container'), totalMkEl: document.getElementById('total-mk'), totalSksEl: document.getElementById('total-sks'), totalIpEl: document.getElementById('total-ip'), courseNav: document.getElementById('course-nav'), categoryFilter: document.getElementById('category-filter'), addCourseModalBtn: document.getElementById('add-course-modal-btn'), printReportBtn: document.getElementById('print-report-btn'), gradeChartCanvas: document.getElementById('gradeChart'), 
+                notificationModal: { el: document.getElementById('notification-modal'), title: document.getElementById('notification-title'), message: document.getElementById('notification-message'), closeBtn: document.getElementById('close-notification-modal-btn') },
+                courseModal: { el: document.getElementById('course-modal'), title: document.getElementById('course-modal-title'), form: document.getElementById('course-form'), idInput: document.getElementById('course-id-input'), cancelBtn: document.getElementById('cancel-course-modal-btn') }
             };
-            const renderFilters = () => {
-                categoryFilterContainer.innerHTML = ''; const schemes = ['All', ...new Set(courses.map(c => c.scheme))]; schemes.forEach(s => { const b = document.createElement('button'); b.textContent = s; b.dataset.filter = s; b.className = `filter-btn text-xs font-semibold px-2.5 py-1 rounded-full transition-colors ${activeFilter===s?'bg-blue-600 text-white':'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`; categoryFilterContainer.appendChild(b); });
-            };
-            const renderChart = () => {
-                if(gradeChartInstance)gradeChartInstance.destroy();const d={labels:courses.map(c=>c.name.length>15?c.name.substring(0,15)+'...':c.name).reverse(),datasets:[{label:'Nilai Akhir',data:courses.map(c=>c.finalScore).reverse(),backgroundColor:courses.map(c=>gradeConverter(c.finalScore).color).reverse(),borderColor:courses.map(c=>gradeConverter(c.finalScore).color.replace('0.6','1')).reverse(),borderWidth:1,borderRadius:4}]};const m=document.documentElement.classList.contains('dark');const g=m?'rgba(255, 255, 255, 0.1)':'rgba(0, 0, 0, 0.1)';const t=m?'#e2e8f0':'#475569';gradeChartInstance=new Chart(gradeChartCanvas,{type:'bar',data:d,options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){const c=courses.slice().reverse()[ctx.dataIndex];return `Nilai: ${ctx.raw} (Grade: ${c.finalGrade})`}}}},scales:{x:{beginAtZero:true,max:100,grid:{color:g},ticks:{color:t}},y:{grid:{display:false},ticks:{color:t}}}}});
-            };
-            
-            // --- FEATURE FUNCTIONS ---
-            const showToast = (message, type = 'success') => {
-                const toast = document.createElement('div');
-                const colors = { success: 'bg-green-500', error: 'bg-red-500' };
-                toast.className = `toast text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-lg ${colors[type]}`;
-                toast.textContent = message;
-                document.getElementById('toast-container').appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            };
-            const openCourseModal = (course = null) => {
-                courseForm.reset();
-                if (course) {
-                    courseModalTitle.textContent = 'Edit Mata Kuliah';
-                    courseIdInput.value = course.id;
-                    courseForm.mkName.value = course.name;
-                    courseForm.mkSks.value = course.sks;
-                    courseForm.mkScheme.value = course.scheme;
-                } else {
-                    courseModalTitle.textContent = 'Tambah Mata Kuliah Baru';
-                    courseIdInput.value = '';
+
+            // --- Core Logic ---
+            function getGradeDetails(score) { if (score > 80) return { letter: 'A', point: 4.0 }; if (score >= 75) return { letter: 'A-', point: 3.5 }; if (score >= 70) return { letter: 'B', point: 3.0 }; if (score >= 65) return { letter: 'B-', point: 2.5 }; if (score >= 60) return { letter: 'C', point: 2.0 }; if (score >= 55) return { letter: 'C-', point: 1.5 }; if (score >= 50) return { letter: 'D', point: 1.0 }; if (score >= 0) return { letter: 'E', point: 0.0 }; return { letter: '-', point: 0.0 }; }
+            function calculateFinalScore(course) { let totalTutorialScore = 0; if (['Tuton', 'Tuweb', 'TTM'].includes(course.scheme)) { const presensiDone = course.tutorial.presensi.filter(Boolean).length; let totalDiskusiNilai = 0, diskusiCount = 0; course.tutorial.nilaiDiskusi.forEach((nilai) => { const parsed = parseFloat(nilai); if (!Number.isNaN(parsed) && parsed >= 0) { totalDiskusiNilai += parsed; diskusiCount++; } }); const avgDiskusiNilai = diskusiCount > 0 ? totalDiskusiNilai / diskusiCount : 0; const presensiScore = (presensiDone / TUTORIAL_SESSIONS) * 20; const diskusiScore = (avgDiskusiNilai / 100) * 30; let totalTugasNilai = 0, tugasCount = 0; course.tutorial.tugasNilai.forEach((nilai, index) => { const parsed = parseFloat(nilai); if (course.tutorial.tugasStatus[index] && !Number.isNaN(parsed) && parsed >= 0) { totalTugasNilai += parsed; tugasCount++; } }); const avgTugasNilai = tugasCount > 0 ? totalTugasNilai / tugasCount : 0; const tugasScore = (avgTugasNilai / 100) * 50; totalTutorialScore = presensiScore + diskusiScore + tugasScore; } let totalPraktikScore = 0; if (['Berpraktik', 'Berpraktikum', 'Praktik', 'Praktikum'].includes(course.scheme)) { let totalPraktikNilai = 0, praktikCount = 0; course.praktik.nilai.forEach((nilai, index) => { const parsed = parseFloat(nilai); if (course.praktik.status[index] && !Number.isNaN(parsed) && parsed >= 0) { totalPraktikNilai += parsed; praktikCount++; } }); totalPraktikScore = praktikCount > 0 ? totalPraktikNilai / praktikCount : 0; }
+                let uasScore = 0;
+                const jumlahSoal = parseFloat(course.uas.jumlahSoal);
+                const jumlahBenar = parseFloat(course.uas.jumlahBenar);
+                if (!isNaN(jumlahSoal) && jumlahSoal > 0 && !isNaN(jumlahBenar) && jumlahBenar >= 0) {
+                    uasScore = (100 / jumlahSoal) * Math.min(jumlahBenar, jumlahSoal);
                 }
-                courseModal.classList.remove('modal-hidden');
-            };
-            const closeCourseModal = () => courseModal.classList.add('modal-hidden');
-            const handleCourseFormSubmit = (e) => {
-                e.preventDefault();
-                const id = courseIdInput.value ? parseInt(courseIdInput.value) : null;
-                const name = courseForm.mkName.value.trim();
-                const sks = parseInt(courseForm.mkSks.value);
-                const scheme = courseForm.mkScheme.value;
-                if (!name || isNaN(sks) || sks <= 0) return showToast('Harap isi semua kolom dengan benar.', 'error');
-                
-                if (id) {
-                    const course = courses.find(c => c.id === id);
-                    if (course) { course.name = name; course.sks = sks; course.scheme = scheme; calculateCourseGrade(course); }
-                    showToast('Mata kuliah berhasil diperbarui!');
-                } else {
-                    const newCourse = {id:Date.now(),name,sks,scheme,grades:{},finalScore:0,finalGrade:'N/A',gradePoint:0};
-                    calculateCourseGrade(newCourse); courses.unshift(newCourse);
-                    showToast('Mata kuliah berhasil ditambahkan!');
-                }
-                closeCourseModal(); updateUI();
-            };
+                let finalScore = 0; 
+                switch (course.scheme) { case 'Tuton': finalScore = totalTutorialScore * 0.3 + uasScore * 0.7; break; case 'Tuweb': case 'TTM': finalScore = totalTutorialScore * 0.5 + uasScore * 0.5; break; case 'Berpraktik': case 'Berpraktikum': finalScore = totalPraktikScore * 0.6 + uasScore * 0.4; break; case 'Praktik': case 'Praktikum': finalScore = totalPraktikScore; break; default: finalScore = uasScore; break; } const gradeDetails = getGradeDetails(finalScore); const sks = parseInt(course.sks, 10) || 0; return { finalScore: finalScore.toFixed(2), letterGrade: gradeDetails.letter, gradePoint: gradeDetails.point, nilaiMutu: (sks * gradeDetails.point).toFixed(2) }; }
+            function ensureArray(source, length, defaultValue) { const base = Array.isArray(source) ? source.slice(0, length) : []; while (base.length < length) base.push(defaultValue); return base; }
+            function getModuleCount(sks) { const sksNumber = parseInt(sks, 10); return (Number.isNaN(sksNumber) || sksNumber <= 0) ? MODULES_PER_SKS : sksNumber * MODULES_PER_SKS; }
+            function normalizeCourse(rawCourse) { const course = { name: rawCourse.name || '', sks: rawCourse.sks || '0', scheme: rawCourse.scheme || 'Tuton', completionDates: rawCourse.completionDates || [], tutorial: { presensi: ensureArray(rawCourse.tutorial?.presensi, TUTORIAL_SESSIONS, false), diskusi: ensureArray(rawCourse.tutorial?.diskusi, TUTORIAL_SESSIONS, false), nilaiDiskusi: ensureArray(rawCourse.tutorial?.nilaiDiskusi, TUTORIAL_SESSIONS, ''), tugasStatus: ensureArray(rawCourse.tutorial?.tugasStatus, TUTORIAL_TASKS, false), tugasNilai: ensureArray(rawCourse.tutorial?.tugasNilai, TUTORIAL_TASKS, ''), catatanDiskusi: ensureArray(rawCourse.tutorial?.catatanDiskusi, TUTORIAL_SESSIONS, '') }, praktik: { deskripsi: ensureArray(rawCourse.praktik?.deskripsi, PRAKTIK_TASKS, ''), status: ensureArray(rawCourse.praktik?.status, PRAKTIK_TASKS, false), nilai: ensureArray(rawCourse.praktik?.nilai, PRAKTIK_TASKS, '') }, uas: { jadwal: rawCourse.uas?.jadwal || '', target: rawCourse.uas?.target || '', jumlahSoal: rawCourse.uas?.jumlahSoal || '', jumlahBenar: rawCourse.uas?.jumlahBenar || '', modul: [] } }; course.uas.modul = ensureArray(rawCourse.uas?.modul, getModuleCount(course.sks), false); return course; }
+
+            // --- UI Rendering ---
+            function updateCourseCardSummary(courseIndex) { const course = state.courses[courseIndex]; if (!course) return; const card = document.getElementById(`course-${courseIndex}`); if (!card) return; const calculation = calculateFinalScore(course); const finalScoreEl = card.querySelector('.final-score'); const letterGradeEl = card.querySelector('.letter-grade'); const nilaiMutuEl = card.querySelector('.nilai-mutu'); if (finalScoreEl) finalScoreEl.textContent = calculation.finalScore; if (letterGradeEl) letterGradeEl.textContent = calculation.letterGrade; if (nilaiMutuEl) nilaiMutuEl.textContent = calculation.nilaiMutu; }
+            function updateUASPredictionDisplay(courseIndex) { const course = state.courses[courseIndex]; if (!course) return; const card = document.getElementById(`course-${courseIndex}`); if (!card) return; const display = card.querySelector('.uas-prediction-result'); if (!display) return; const jumlahSoal = parseFloat(course.uas.jumlahSoal); const jumlahBenar = parseFloat(course.uas.jumlahBenar); let result = '...'; if (!isNaN(jumlahSoal) && jumlahSoal > 0 && !isNaN(jumlahBenar) && jumlahBenar >= 0) { result = ((100 / jumlahSoal) * Math.min(jumlahBenar, jumlahSoal)).toFixed(2); } display.textContent = result; }
+            function renderAll() { renderCourses(); renderNavigation(); renderCategoryFilters(); updateSummary(); renderChart(); }
+            function renderCourses() { const visibleIndexes = []; state.courses.forEach((course, index) => { if (state.selectedCategory) { if (course.scheme === state.selectedCategory) visibleIndexes.push(index); } else if (state.selectedCourseIndex === index) { visibleIndexes.push(index); } }); const shouldShowPlaceholder = state.courses.length === 0 || (visibleIndexes.length === 0 && state.selectedCourseIndex === null && state.selectedCategory === null); dom.coursesContainer.innerHTML = ''; if (shouldShowPlaceholder) { const msg = state.courses.length === 0 ? { title: 'Belum Ada Mata Kuliah', description: 'Gunakan tombol "Tambah MK" untuk memulai.' } : { title: 'Pilih Mata Kuliah', description: 'Gunakan navigator di kiri untuk menampilkan data.' }; dom.coursesContainer.innerHTML = `<div class="card text-center py-12 px-6 rounded-2xl"><svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-lg font-semibold text-white">${msg.title}</h3><p class="mt-1 text-sm text-gray-400">${msg.description}</p></div>`; } else { const indexesToRender = visibleIndexes.length > 0 ? visibleIndexes : (state.selectedCourseIndex !== null ? [state.selectedCourseIndex] : []); indexesToRender.forEach(index => { const courseCard = document.createElement('div'); courseCard.id = `course-${index}`; courseCard.className = 'card p-6 rounded-2xl tracker-card scroll-mt-24'; courseCard.innerHTML = generateCourseCardHTML(state.courses[index], index); dom.coursesContainer.appendChild(courseCard); }); } }
+            function updateSummary() { let totalSks = 0, totalNilaiMutu = 0; state.courses.forEach(course => { const sks = parseInt(course.sks, 10) || 0; if (sks > 0) { const calculation = calculateFinalScore(course); totalSks += sks; totalNilaiMutu += parseFloat(calculation.nilaiMutu); } }); const ipk = totalSks > 0 ? (totalNilaiMutu / totalSks).toFixed(2) : '0.00'; dom.totalMkEl.textContent = state.courses.length; dom.totalSksEl.textContent = totalSks; dom.totalIpEl.textContent = ipk; }
+            function renderNavigation() { dom.courseNav.innerHTML = ''; if (state.courses.length === 0) { dom.courseNav.innerHTML = '<p class="text-xs text-gray-400">Belum ada mata kuliah.</p>'; return; } const fragment = document.createDocumentFragment(); state.courses.forEach((course, index) => { const { letterGrade } = calculateFinalScore(course); const sks = parseInt(course.sks, 10) || 0; const isActive = state.selectedCategory === null && state.selectedCourseIndex === index; const button = document.createElement('button'); button.type = 'button'; button.className = `text-left rounded-lg border px-3 py-2 shadow-sm transition-all focus:outline-none ${isActive ? 'border-primary-color bg-primary-color/10 text-primary-color' : 'border-transparent text-gray-300 hover:border-primary-color/50 hover:bg-primary-color/5'}`; button.onclick = () => { state.selectedCourseIndex = index; state.selectedCategory = null; renderAll(); document.getElementById(`course-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; button.innerHTML = `<div class="flex flex-col"><span class="text-sm font-medium leading-snug text-white">${course.name}</span><span class="text-xs text-gray-400">${letterGrade} • ${sks} SKS</span></div>`; fragment.appendChild(button); }); dom.courseNav.appendChild(fragment); }
+            function renderCategoryFilters() { dom.categoryFilter.innerHTML = ''; if (state.courses.length === 0) return; const uniqueSchemes = [...new Set(state.courses.map(c => c.scheme))]; if (uniqueSchemes.length <= 1) return; const createChip = (label, value, isActive, onClick) => { const chip = document.createElement('button'); chip.type = 'button'; chip.textContent = label; chip.dataset.value = value; chip.className = `inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none ${isActive ? 'border-primary-color bg-primary-color/20 text-primary-color' : 'border-gray-700 text-gray-300 hover:border-primary-color/50 hover:text-primary-color'}`; chip.addEventListener('click', onClick); return chip; }; const allChip = createChip('Semua', 'all', state.selectedCategory === null, () => { state.selectedCategory = null; renderAll(); }); dom.categoryFilter.appendChild(allChip); uniqueSchemes.forEach(scheme => { const chip = createChip(SCHEME_DETAILS[scheme]?.label || scheme, scheme, state.selectedCategory === scheme, () => { state.selectedCategory = scheme; state.selectedCourseIndex = null; renderAll(); }); dom.categoryFilter.appendChild(chip); }); }
             
-            // --- AUTH & DATA MANAGEMENT ---
-            const handleLogin = () => {
-                const username = usernameInput.value.trim(); if (!username) { usernameInput.classList.add('border-red-500'); return; }
-                currentUser = username; sessionStorage.setItem('ut_tracker_user', username);
-                loginContainer.style.display = 'none'; appContainer.style.display = 'block';
-                currentUserEl.textContent = currentUser; loadData(); updateUI();
-                if (!localStorage.getItem('ut_tracker_welcomed')) { welcomeModal.classList.remove('modal-hidden'); }
-            };
-            const handleLogout = () => { currentUser = null; sessionStorage.removeItem('ut_tracker_user'); courses = []; loginContainer.style.display = 'flex'; appContainer.style.display = 'none'; usernameInput.value = ''; };
-            const handleExport = () => { if (courses.length === 0) return showToast('Tidak ada data untuk diekspor.', 'error'); const dataStr = JSON.stringify(courses, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `ut_tracker_data_${currentUser}.json`; a.click(); URL.revokeObjectURL(url); showToast('Data berhasil diekspor!'); };
-            const handleImport = (e) => {
-                const file = e.target.files[0]; if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try { const importedCourses = JSON.parse(event.target.result); if (!Array.isArray(importedCourses)) throw new Error(); courses = importedCourses; updateUI(); showToast('Data berhasil diimpor!'); } catch (err) { showToast('Gagal mengimpor data. File tidak valid.', 'error'); }
+            function renderChart() {
+                if (state.gradeChartInstance) { state.gradeChartInstance.destroy(); }
+                if (state.courses.length === 0) return;
+
+                const chartData = {
+                    labels: state.courses.map(c => c.name.length > 15 ? c.name.substring(0, 15) + '...' : c.name),
+                    datasets: [{
+                        label: 'Nilai Akhir',
+                        data: state.courses.map(c => calculateFinalScore(c).finalScore),
+                        backgroundColor: state.courses.map(c => {
+                            const { letterGrade } = calculateFinalScore(c);
+                            const colors = {
+                                'A': '#00B2FF', 'A-': '#33CFFF', 'B': '#FF5E00', 'B-': '#FF8C4A',
+                                'C': '#E65500', 'C-': '#CC4C00', 'D': '#D92525', 'E': '#A61C1C', '-': '#555555'
+                            };
+                            return colors[letterGrade] || colors['-'];
+                        }),
+                        borderRadius: 4,
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1
+                    }]
                 };
-                reader.readAsText(file); e.target.value = '';
-            };
-            const handleClearData = () => { if (confirm('Anda yakin ingin menghapus SEMUA data mata kuliah? Aksi ini tidak dapat dibatalkan.')) { courses = []; updateUI(); showToast('Semua data berhasil dihapus.'); } };
+                const gridColor = 'rgba(255, 255, 255, 0.1)';
+                const textColor = '#e2e8f0';
+                state.gradeChartInstance = new Chart(dom.gradeChartCanvas, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        indexAxis: 'x',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const course = state.courses[context.dataIndex];
+                                        const calc = calculateFinalScore(course);
+                                        return `Nilai: ${calc.finalScore} (Grade: ${calc.letterGrade})`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 100, grid: { color: gridColor }, ticks: { color: textColor } },
+                            x: { grid: { display: false }, ticks: { color: textColor, autoSkip: false } }
+                        }
+                    }
+                });
+            }
 
-            const updateUI = () => { saveData(); renderFilters(); renderCourses(); updateStats(); renderChart(); };
-
-            // --- EVENT LISTENERS ---
-            themeToggle.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light'; if(currentUser) renderChart(); });
-            loginBtn.addEventListener('click', handleLogin);
-            usernameInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleLogin(); });
-            logoutBtn.addEventListener('click', handleLogout);
-            addCourseModalBtn.addEventListener('click', () => openCourseModal());
-            cancelCourseModalBtn.addEventListener('click', closeCourseModal);
-            courseForm.addEventListener('submit', handleCourseFormSubmit);
-            exportDataBtn.addEventListener('click', handleExport);
-            importDataBtn.addEventListener('click', () => importFileInput.click());
-            importFileInput.addEventListener('change', handleImport);
-            clearDataBtn.addEventListener('click', handleClearData);
-            closeWelcomeModalBtn.addEventListener('click', () => { welcomeModal.classList.add('modal-hidden'); localStorage.setItem('ut_tracker_welcomed', 'true'); });
+            function generateCourseCardHTML(course, index) {
+                const detail = SCHEME_DETAILS[course.scheme] || { label: course.scheme, badgeClass: 'bg-slate-700/70 text-slate-200' };
+                const hasTutorial = ['Tuton', 'Tuweb', 'TTM'].includes(course.scheme);
+                const hasPraktik = ['Berpraktik', 'Berpraktikum', 'Praktik', 'Praktikum'].includes(course.scheme);
+                const hasUAS = !['Praktik', 'Praktikum'].includes(course.scheme);
+                const calculation = calculateFinalScore(course);
+                const moduleCount = getModuleCount(course.sks);
             
-            coursesContainer.addEventListener('change', (e) => { if (e.target.matches('input[type="number"]')) { const { courseId, gradeKey } = e.target.dataset; let val = Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)); e.target.value = val; const course = courses.find(c => c.id === parseInt(courseId)); if (course) { course.grades[gradeKey] = val; calculateCourseGrade(course); updateUI(); } } });
-            coursesContainer.addEventListener('click', (e) => {
-                const editBtn = e.target.closest('.edit-btn');
-                const deleteBtn = e.target.closest('.delete-btn');
-                if (editBtn) { const courseId = parseInt(editBtn.dataset.editId); const course = courses.find(c => c.id === courseId); if(course) openCourseModal(course); }
-                if (deleteBtn) { const courseId = parseInt(deleteBtn.dataset.deleteId); if(confirm('Anda yakin ingin menghapus mata kuliah ini?')) { courses = courses.filter(c => c.id !== courseId); updateUI(); showToast('Mata kuliah dihapus.'); } }
-            });
-            categoryFilterContainer.addEventListener('click', (e) => { if(e.target.matches('.filter-btn')) { activeFilter = e.target.dataset.filter; renderCourses(); renderFilters(); } });
-            courseNavContainer.addEventListener('click', (e) => { if (e.target.tagName === 'A') { e.preventDefault(); document.querySelector(e.target.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); } });
+                const tutorialSection = hasTutorial ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Progress Tutorial</h4><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Sesi</th><th class="p-3 text-center">Presensi</th><th class="p-3 text-center">Partisipasi Diskusi</th><th class="p-3 text-left">Nilai Diskusi</th><th class="p-3 text-left">Catatan</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: TUTORIAL_SESSIONS }, (_, i) => `<tr><td class="p-3 font-medium">${i + 1}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'presensi', ${i})" ${course.tutorial.presensi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'diskusi', ${i})" ${course.tutorial.diskusi[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'nilaiDiskusi', ${i})" value="${course.tutorial.nilaiDiskusi?.[i] || ''}" class="w-24 text-sm p-2"></td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'catatanDiskusi', ${i})" value="${course.tutorial.catatanDiskusi?.[i] || ''}" class="w-full text-sm p-2"></td></tr>`).join('')}</tbody></table></div><h5 class="font-semibold mt-6 mb-3">Tugas Wajib</h5><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-center">Sesi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: TUTORIAL_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3 text-center">${i === 0 ? 3 : i === 1 ? 5 : 7}</td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'tugasStatus', ${i})" ${course.tutorial.tugasStatus[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'tugasNilai', ${i})" value="${course.tutorial.tugasNilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
+                const praktikSection = hasPraktik ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Progress Praktik/Praktikum</h4><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-wide text-gray-400 bg-black/20"><tr><th class="p-3 text-left">Tugas</th><th class="p-3 text-left">Deskripsi</th><th class="p-3 text-center">Status</th><th class="p-3 text-left">Nilai</th></tr></thead><tbody class="divide-y divide-gray-700">${Array.from({ length: PRAKTIK_TASKS }, (_, i) => `<tr><td class="p-3 font-medium">Tugas ${i + 1}</td><td class="p-3"><input type="text" oninput="handlers.updateItem(event, ${index}, 'praktikDeskripsi', ${i})" value="${course.praktik.deskripsi[i]}" class="w-full text-sm p-2"></td><td class="p-3 text-center"><input type="checkbox" onchange="handlers.updateItem(event, ${index}, 'praktikStatus', ${i})" ${course.praktik.status[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"></td><td class="p-3"><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'praktikNilai', ${i})" value="${course.praktik.nilai[i]}" class="w-24 text-sm p-2"></td></tr>`).join('')}</tbody></table></div></div>` : '';
+                const uasSection = hasUAS ? `<div class="mt-6 border-t border-gray-700 pt-6"><h4 class="text-lg font-semibold mb-3">Persiapan UAS</h4><div class="grid md:grid-cols-2 gap-4 mb-6"><div><label class="text-sm font-medium">Jadwal UAS</label><input type="datetime-local" onchange="handlers.updateItem(event, ${index}, 'uasJadwal')" value="${course.uas.jadwal}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Target Pribadi Nilai UAS</label><input type="number" min="0" max="100" oninput="handlers.updateItem(event, ${index}, 'uasTarget')" value="${course.uas.target}" class="w-full mt-1 text-sm p-2"></div></div><div class="card p-4 rounded-lg"><h5 class="font-semibold mb-3">Prediktif Nilai UAS (untuk Kalkulasi)</h5><div class="grid grid-cols-3 gap-4 items-end"><div><label class="text-sm font-medium">Jumlah Soal</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahSoal')" value="${course.uas.jumlahSoal || ''}" class="w-full mt-1 text-sm p-2"></div><div><label class="text-sm font-medium">Jumlah Benar</label><input type="number" min="0" oninput="handlers.updateItem(event, ${index}, 'uasJumlahBenar')" value="${course.uas.jumlahBenar || ''}" class="w-full mt-1 text-sm p-2"></div><div class="text-center pb-1"><p class="text-sm text-gray-400">Hasil: <span class="text-xl font-bold text-white uas-prediction-result">...</span></p></div></div></div><h5 class="font-semibold mt-6 mb-3">Checklist Belajar Modul</h5><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">${Array.from({ length: moduleCount }, (_, i) => `<div class="flex items-center gap-2"><input type="checkbox" id="modul-${index}-${i}" onchange="handlers.updateItem(event, ${index}, 'modul', ${i})" ${course.uas.modul[i] ? 'checked' : ''} class="h-5 w-5 rounded border-gray-600"><label for="modul-${index}-${i}" class="text-sm">Modul ${i + 1}</label></div>`).join('')}</div></div>` : '';
+            
+                return `<div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"><div><h3 class="text-xl font-bold text-white">${course.name}</h3><p class="text-sm text-gray-400">${course.sks} SKS • <span class="inline-flex items-center gap-1 font-medium px-2 py-0.5 rounded-full text-xs ${detail.badgeClass}">${detail.label}</span></p></div><div class="flex items-center gap-1"><button onclick="handlers.openCourseModal(${index})" class="text-gray-400 hover:text-secondary-color p-2 rounded-full transition-colors"><span class="sr-only">Edit</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button><button onclick="handlers.deleteCourse(${index})" class="text-gray-400 hover:text-red-500 p-2 rounded-full transition-colors"><span class="sr-only">Hapus</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg></button></div></div><div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-black/20 p-4 rounded-xl"><div><p class="text-xs uppercase text-gray-400">Nilai Akhir</p><p class="text-2xl font-bold final-score">${calculation.finalScore}</p></div><div><p class="text-xs uppercase text-gray-400">Nilai Huruf</p><p class="text-2xl font-bold letter-grade">${calculation.letterGrade}</p></div><div><p class="text-xs uppercase text-gray-400">Nilai Mutu</p><p class="text-2xl font-bold nilai-mutu">${calculation.nilaiMutu}</p></div></div>${tutorialSection}${praktikSection}${uasSection}`;
+            }
+            
+            // --- Handlers & Event Listeners ---
+            const handlers = {
+                saveData: () => { if (state.currentUser) localStorage.setItem(`ut_tracker_data_${state.currentUser}`, JSON.stringify(state.courses)); },
+                loadData: () => { const data = localStorage.getItem(`ut_tracker_data_${state.currentUser}`); state.courses = data ? JSON.parse(data).map(normalizeCourse) : []; },
+                saveAndRenderAll: () => { handlers.saveData(); renderAll(); },
+                saveAndUpdateUI: (updatedCourseIndex) => { 
+                    handlers.saveData();
+                    if (updatedCourseIndex !== null) {
+                        updateCourseCardSummary(updatedCourseIndex);
+                        updateUASPredictionDisplay(updatedCourseIndex);
+                    }
+                    updateSummary(); 
+                    renderNavigation(); 
+                    renderChart(); 
+                },
+                handleLogin: () => { const username = dom.usernameInput.value.trim(); if (!username) return handlers.showNotification('Error', 'Nama pengguna tidak boleh kosong.'); state.currentUser = username; sessionStorage.setItem('ut_tracker_user', username); dom.loginContainer.style.display = 'none'; dom.appContainer.style.display = 'block'; dom.currentUserEl.textContent = state.currentUser; handlers.loadData(); state.selectedCourseIndex = state.courses.length > 0 ? 0 : null; state.selectedCategory = null; renderAll(); createParticles(); },
+                handleLogout: () => { sessionStorage.removeItem('ut_tracker_user'); window.location.reload(); },
+                openCourseModal: (index = null) => { dom.courseModal.form.reset(); if (index !== null && state.courses[index]) { const course = state.courses[index]; dom.courseModal.title.textContent = 'Edit Mata Kuliah'; dom.courseModal.idInput.value = index; dom.courseModal.form.mkName.value = course.name; dom.courseModal.form.mkSks.value = course.sks; dom.courseModal.form.mkScheme.value = course.scheme; } else { dom.courseModal.title.textContent = 'Tambah Mata Kuliah Baru'; dom.courseModal.idInput.value = ''; } dom.courseModal.el.classList.remove('modal-hidden'); },
+                closeCourseModal: () => dom.courseModal.el.classList.add('modal-hidden'),
+                handleCourseFormSubmit: (e) => { e.preventDefault(); const name = dom.courseModal.form.mkName.value.trim(); const sks = dom.courseModal.form.mkSks.value.trim(); const scheme = dom.courseModal.form.mkScheme.value; const index = dom.courseModal.idInput.value; if (!name || !sks) return handlers.showNotification('Error', 'Nama dan SKS tidak boleh kosong.'); if (index !== '') { const courseIndex = parseInt(index); state.courses[courseIndex] = normalizeCourse({ ...state.courses[courseIndex], name, sks, scheme }); handlers.showNotification('Sukses', 'Mata kuliah diperbarui!'); } else { const newCourse = normalizeCourse({ name, sks, scheme }); state.courses.push(newCourse); state.selectedCourseIndex = state.courses.length - 1; state.selectedCategory = null; handlers.showNotification('Sukses', 'Mata kuliah ditambahkan!'); } handlers.closeCourseModal(); handlers.saveAndRenderAll(); },
+                deleteCourse: (index) => { if (confirm(`Yakin ingin menghapus "${state.courses[index].name}"?`)) { state.courses.splice(index, 1); if (state.selectedCourseIndex === index || state.courses.length === 0) { state.selectedCourseIndex = state.courses.length > 0 ? 0 : null; } else if (state.selectedCourseIndex > index) { state.selectedCourseIndex -= 1; } if (!state.courses.some(c => c.scheme === state.selectedCategory)) { state.selectedCategory = null; } handlers.showNotification('Info', 'Mata kuliah dihapus.'); handlers.saveAndRenderAll(); } },
+                updateItem: (event, courseIndex, itemType, itemIndex) => {
+                    const course = state.courses[courseIndex];
+                    if (!course) return;
 
-            // --- INITIALIZATION ---
-            const savedUser = sessionStorage.getItem('ut_tracker_user');
-            if (savedUser) { usernameInput.value = savedUser; handleLogin(); }
+                    const element = event.target;
+                    let value = element.type === 'checkbox' ? element.checked : element.value;
+
+                    if (element.type === 'number') {
+                        let numValue = parseFloat(value);
+                        if (element.max && !isNaN(numValue) && numValue > parseFloat(element.max)) {
+                           value = element.max;
+                           element.value = element.max;
+                        }
+                        if (element.min && !isNaN(numValue) && numValue < parseFloat(element.min)) {
+                           value = element.min;
+                           element.value = element.min;
+                        }
+                    }
+                    
+                    if (element.type === 'checkbox' && value === true) {
+                        course.completionDates = course.completionDates || [];
+                        course.completionDates.push(new Date().toISOString());
+                    }
+
+                    switch (itemType) {
+                        case 'presensi': course.tutorial.presensi[itemIndex] = value; break;
+                        case 'diskusi': course.tutorial.diskusi[itemIndex] = value; break;
+                        case 'nilaiDiskusi': course.tutorial.nilaiDiskusi[itemIndex] = value; break;
+                        case 'tugasStatus': course.tutorial.tugasStatus[itemIndex] = value; break;
+                        case 'tugasNilai': course.tutorial.tugasNilai[itemIndex] = value; break;
+                        case 'catatanDiskusi': course.tutorial.catatanDiskusi[itemIndex] = value; break;
+                        case 'praktikDeskripsi': course.praktik.deskripsi[itemIndex] = value; break;
+                        case 'praktikStatus': course.praktik.status[itemIndex] = value; break;
+                        case 'praktikNilai': course.praktik.nilai[itemIndex] = value; break;
+                        case 'uasJadwal': course.uas.jadwal = value; break;
+                        case 'uasTarget': course.uas.target = value; break;
+                        case 'uasJumlahSoal': course.uas.jumlahSoal = value; break;
+                        case 'uasJumlahBenar': course.uas.jumlahBenar = value; break;
+                        case 'modul': course.uas.modul[itemIndex] = value; break;
+                    }
+                    handlers.saveAndUpdateUI(courseIndex);
+                },
+                showNotification: (title, message) => { dom.notificationModal.title.textContent = title; dom.notificationModal.message.textContent = message; dom.notificationModal.el.classList.remove('modal-hidden'); },
+                closeNotification: () => dom.notificationModal.el.classList.add('modal-hidden'),
+                printReport: () => {
+                    const reportWindow = window.open('', '_blank');
+                    const ipk = dom.totalIpEl.textContent;
+                    const totalSks = dom.totalSksEl.textContent;
+
+                    let reportHTML = `
+                        <html>
+                            <head>
+                                <title>Laporan Nilai - ${state.currentUser}</title>
+                                <script src="https://cdn.tailwindcss.com"><\/script>
+                                <style>
+                                    body { font-family: 'Rajdhani', sans-serif; background: #1a1a1a; color: #f0f0f0; }
+                                    .report-container { max-width: 800px; margin: auto; padding: 2rem; }
+                                    .course-block { border: 1px solid #444; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+                                    .course-header { background: #2a2a2a; padding: 1rem; }
+                                    .course-body { padding: 1rem; }
+                                    table { width: 100%; border-collapse: collapse; }
+                                    th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #333; }
+                                    th { background: #222; }
+                                    @media print {
+                                        body { background: #fff; color: #000; }
+                                        .no-print { display: none; }
+                                        .report-container { padding: 0; }
+                                        .course-block { border: 1px solid #ccc; page-break-inside: avoid; }
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="report-container">
+                                    <div class="flex justify-between items-center mb-8">
+                                        <div>
+                                            <h1 class="text-3xl font-bold" style="color: var(--primary-color);">Laporan Nilai</h1>
+                                            <p class="text-lg">Pengguna: ${state.currentUser}</p>
+                                        </div>
+                                        <button onclick="window.print()" class="no-print bg-blue-600 text-white font-bold py-2 px-4 rounded">Print Dokumen</button>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4 mb-8 text-center">
+                                        <div class="bg-gray-800 p-4 rounded">
+                                            <p class="text-sm uppercase text-gray-400">Total SKS</p>
+                                            <p class="text-2xl font-bold">${totalSks}</p>
+                                        </div>
+                                        <div class="bg-gray-800 p-4 rounded">
+                                            <p class="text-sm uppercase text-gray-400">IPK</p>
+                                            <p class="text-2xl font-bold">${ipk}</p>
+                                        </div>
+                                    </div>
+                    `;
+
+                    state.courses.forEach(course => {
+                        const calc = calculateFinalScore(course);
+                        reportHTML += `
+                            <div class="course-block">
+                                <div class="course-header">
+                                    <h2 class="text-xl font-bold">${course.name} (${course.sks} SKS)</h2>
+                                    <p class="text-sm text-gray-400">${SCHEME_DETAILS[course.scheme].label}</p>
+                                </div>
+                                <div class="course-body">
+                                    <h3 class="font-bold mb-2">Hasil Akhir</h3>
+                                    <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Akhir</p><p class="font-bold">${calc.finalScore}</p></div>
+                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Huruf</p><p class="font-bold">${calc.letterGrade}</p></div>
+                                        <div class="bg-gray-800 p-2 rounded"><p class="text-xs text-gray-400">Nilai Mutu</p><p class="font-bold">${calc.nilaiMutu}</p></div>
+                                    </div>
+                        `;
+                        if (['Tuton', 'Tuweb', 'TTM'].includes(course.scheme)) {
+                            reportHTML += `
+                                <h3 class="font-bold mt-4 mb-2">Detail Tutorial</h3>
+                                <table>
+                                    <thead><tr><th>Sesi</th><th>Presensi</th><th>Partisipasi</th><th>Nilai Diskusi</th></tr></thead>
+                                    <tbody>
+                                        ${course.tutorial.presensi.map((status, i) => `
+                                            <tr><td>${i + 1}</td><td>${status ? '&#10003;' : '&#10007;'}</td><td>${course.tutorial.diskusi[i] ? '&#10003;' : '&#10007;'}</td><td>${course.tutorial.nilaiDiskusi[i] || '-'}</td></tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                                <h3 class="font-bold mt-4 mb-2">Detail Tugas</h3>
+                                <table>
+                                    <thead><tr><th>Tugas</th><th>Status</th><th>Nilai</th></tr></thead>
+                                    <tbody>
+                                        ${course.tutorial.tugasStatus.map((status, i) => `
+                                            <tr><td>Tugas ${i+1}</td><td>${status ? '&#10003; Selesai' : '&#10007; Belum'}</td><td>${course.tutorial.tugasNilai[i] || '-'}</td></tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            `;
+                        }
+                         reportHTML += `</div></div>`;
+                    });
+
+                    reportHTML += `</div></body></html>`;
+                    reportWindow.document.write(reportHTML);
+                    reportWindow.document.close();
+                }
+            };
+
+            // --- Particle Creation ---
+            function createParticles() { const cont = document.getElementById('particles'); cont.innerHTML = ''; const count = 30; for (let i = 0; i < count; i++) { const p = document.createElement('div'); p.className = 'particle' + (Math.random() > 0.5 ? ' blue' : ''); p.style.left = Math.random() * 100 + '%'; p.style.animationDelay = Math.random() * 15 + 's'; p.style.animationDuration = (Math.random() * 10 + 15) + 's'; cont.appendChild(p); } }
+
+            // --- Event Listeners & Init ---
+            function setupListeners() {
+                dom.loginBtn.addEventListener('click', handlers.handleLogin);
+                dom.usernameInput.addEventListener('keypress', e => e.key === 'Enter' && handlers.handleLogin);
+                dom.logoutBtn.addEventListener('click', handlers.handleLogout);
+                dom.addCourseModalBtn.addEventListener('click', () => handlers.openCourseModal());
+                dom.courseModal.cancelBtn.addEventListener('click', handlers.closeCourseModal);
+                dom.courseModal.form.addEventListener('submit', handlers.handleCourseFormSubmit);
+                dom.printReportBtn.addEventListener('click', handlers.printReport);
+                dom.notificationModal.closeBtn.addEventListener('click', handlers.closeNotification);
+            }
+            function init() { setupListeners(); const savedUser = sessionStorage.getItem('ut_tracker_user'); if (savedUser) { dom.usernameInput.value = savedUser; handlers.handleLogin(); } else { createParticles(); } }
+
+            init();
+            window.handlers = handlers;
         });
     </script>
 </body>
